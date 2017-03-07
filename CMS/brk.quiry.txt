@@ -1,0 +1,22 @@
+<form action="<?=$_SERVER['PHP_SELF']?>" method="get">
+    <?php
+    $p = new pagination;
+    $p->items($count);
+    $p->limit(10);
+    $p->currentPage($_REQUEST[page]);
+    $p->show();
+	?>
+    </form>
+
+
+
+
+  <form action="<?=$_SERVER['PHP_SELF']?>" method="get">
+    <?php
+    $p = new pagination;
+    $p->items($count);
+    $p->limit(10);
+    $p->currentPage($_REQUEST[page]);
+    $p->show();
+	?>
+    </form>
