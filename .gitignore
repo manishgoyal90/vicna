@@ -1,0 +1,11 @@
+# Exclude these files from the git repo
+config/connect.php
+.htaccess
+*.bak
+# Hidden system files
+.DS_Store
+*.DS_Store
+*[Tt]humbs.db
+*.Trashes
+RemoteSystemsTempFiles/
+# Include the following files, which were blocked in the above commands
