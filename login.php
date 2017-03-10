@@ -167,7 +167,7 @@ if($_POST['submit']=="Sign In") {
           
           <button type="submit" name='submit' class="btn btn-lg btn-primary btn-block" value="Sign In">Sign in</button>
           <div>
-            <a href="register.php">Create account</a> 
+            <a href="#" onClick="alert('Under Construction.');">Forgot Password</a> 
           </div>
           
         </form>
