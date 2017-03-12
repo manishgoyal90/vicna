@@ -561,14 +561,14 @@ $(".dt_pic").datepicker({
                               <?=base64_decode($rowdest7['Password'])?>
                             </p></td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                           <td><p><i class="icon-male"></i>&nbsp;Sex</p></td>
                           <td><p>:</p></td>
                           <td><p>
                               <?php if($rowdest7['Gender']!='') { echo $rowdest7['Gender'] ; } else { echo "N/A"; } ?>
                             </p></td>
-                        </tr>
-                        <tr>
+                        </tr>-->
+<!--                        <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Country </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
@@ -589,7 +589,7 @@ $(".dt_pic").datepicker({
                               <?=$rowdest7['City']?>
                             </p></td>
                         </tr>
-                        <tr>
+-->                        <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Address </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
@@ -617,13 +617,13 @@ $(".dt_pic").datepicker({
                               <?=$rowdest7['ZipCode']?>
                             </p></td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;BusinessName </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
                               <?=$rowdest7['BusinessName']?>
                             </p></td>
-                        </tr>
+                        </tr>-->
                         <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;TradingName </p></td>
                           <td><p>:</p></td>
