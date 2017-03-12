@@ -684,7 +684,7 @@ $(".dt_pic").datepicker({
                                 <input type="password" name="Password" value="<?=base64_decode($rowdest7['Password'])?>">
                               </p></td>
                           </tr>
-                          <tr>
+                          <!--<tr>
                             <td><p><i class="icon-male"></i>&nbsp;Gender</p></td>
                             <td><p>:</p></td>
                             <td><p>
@@ -696,7 +696,7 @@ $(".dt_pic").datepicker({
                                   <input type="radio" name="Gender" <?php if($rowdest7['Gender'] == "Female"){echo 'checked';} ?> value="Female">
                                   &nbsp;Female</label>
                               </p></td>
-                          </tr>
+                          </tr>-->
                           <tr>
                             <td width="150px"><p><i class="icon-lock"></i>&nbsp;Country </p></td>
                             <td><p>:</p></td>
