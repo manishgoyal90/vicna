@@ -1,6 +1,6 @@
 <?php
  include 'config/connect.php'; 
-  include 'contact_form.php';
+ include 'contact_form.php';
  ?>
 <!DOCTYPE html>
 <html lang="en">

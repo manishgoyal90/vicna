@@ -333,12 +333,12 @@
 						<div class="portlet box grey">
 							<div class="portlet-title">
 								<div class="caption"><i class="icon-reorder"></i><?=$pagetitle?></div>
-								<div class="tools">
+								<!--<div class="tools">
 									<a href="javascript:;" class="collapse"></a>
 									<a href="#portlet-config" data-toggle="modal" class="config"></a>
 									<a href="javascript:;" class="reload"></a>
 									<a href="javascript:;" class="remove"></a>
-								</div>
+								</div>-->
 							</div>
 							<div class="portlet-body">
 								<!--<div class="table-toolbar">
@@ -365,30 +365,48 @@
                                                   <input type="text" class="span m-wrap"  name="firstname" id="firstname" value="<?=$_REQUEST['firstname']?>" />
                                                 </div>
                                                </div>
-                                               
-                                              <div class="control-group" style="margin-bottom:0px;">											  
-                                                         <label class="control-label">Email <span style="color:#ff0000;">*</span></label> 
-                                                        <div class="controls relative"> 
-                                                            <input type="text"  name="email" id="email" class="span m-wrap" value="" />
-                                                           </div>
-                                                    </div>	
-                                               
-                                             <div class="control-group" style="margin-bottom:0px;">											  
-                                                          <label class="control-label">Password <span style="color:#ff0000;">*</span></label> 
-                                                        <div class="controls relative"> 
-                                                            <input type="password" name="password" id="password" class="span m-wrap"  />
-                                                           </div>
-                                                    </div>
-													
-											<div class="control-group" style="margin-bottom:0px;">											  
+                                            <div class="control-group" style="margin-bottom:0px;">											  
                                                           <label class="control-label">date of Birth <span style="color:#ff0000;">*</span></label> 
                                                         <div class="controls relative"> 
                                                             <input type="text" name="dob" id="dob" class="span m-wrap" placeholder="dd-mm-yyyy" />
                                                            </div>
+                                                    </div>  
+                                            <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">Home Address <span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                           <textarea name="home_address" id="home_address" class="span m-wrap"></textarea>
+                                                           </div>
                                                     </div>
-												
-													
-													<div class="control-group" style="margin-bottom:0px;">
+                                            <div class="control-group" style="margin-bottom:0px;">											  
+                                                         <label class="control-label">Email <span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                           <div id="email_div">
+                                                 <button type="button" class="r-btnAdd">Add +</button>
+        <div class="r-group">
+               <select name="client[0][pos_for_email]" id="client_0_pos_for_email" data-pattern-name="client[++][pos_for_email]" data-pattern-id="client_++_pos_for_email" onChange="check_contact_person(this.value);" style="width:55%"  >
+    	<option value="Manager">Manager</option>
+        <option value="Admin">Admin</option>
+        <option value="Payroll">Payroll</option>
+        <option value="Nurse In-Charge">Nurse In-Charge</option>
+        <option value="Other">Other</option>
+    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
+                <input type="text" name="client[0][email]" id="client_0_email" data-pattern-name="client[++][email]" data-pattern-id="client_++_email" />
+            <p>
+                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
+                <button type="button" class="r-btnRemove">Remove -</button>
+            </p>
+        </div>
+        
+    </div>
+                                                           </div>
+                                                    </div>	
+                                            <!--<div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">Password <span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="password" name="password" id="password" class="span m-wrap"  />
+                                                           </div>
+                                                    </div>-->
+											<div class="control-group" style="margin-bottom:0px;">
 													  <label class="control-label">Image <span style="color:#ff0000;">*</span>
                                                       </label>
 													  <div class="controls">
@@ -406,7 +424,41 @@
 														 </div>
 													  </div>
                                                       <span style="font-size:12px; margin-bottom:10px;">Format : jpg, jpeg, png</span>
-												   </div>		
+												   </div>	
+                                                  
+                                                              <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">Upload Document<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                             <select name="doc_type">
+                                                              <option value="AHPRA Registration">AHPRA Registration</option>
+                                                              <option value="Police Check">Police Check</option>
+                                                              <option value="WWC">WWC</option>
+                                                              <option value="First Aid Certificate">First Aid Certificate</option>
+                                                              <option value="CPR">CPR</option>
+                                                              <option value="Driver’s License">Driver’s License</option>
+                                                             <option value="Medicare">Medicare</option>
+                                                              <option value="Passport">Passport</option>
+                                                              <option value="Citizenship Certificate">Citizenship Certificate</option>
+                                                              <option value="Visa">Visa</option>
+                                                               <option value="Other">Other</option>
+                                                              
+                                                              </select> <input type="file" class="default" name="doc_file" onchange="checkFile(this)" />
+                                                           </div>
+                                                    </div>
+                                                   
+                                                    <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">WWC Number<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="wwc_number" id="wwc_number" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+													<div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">WWC Valid Till<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="wwc_valid" id="wwc_valid" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+                                                    	
 											</div>
 											<div class="span6">
 													
@@ -416,21 +468,56 @@
 														  <input type="text" class="span m-wrap" name="lastname"  id="lastname" value="<?=$_REQUEST['lastname']?>" />
 														</div>
 													   </div>
+                                                       <div class="control-group" style="margin-bottom:0px;">
+													  <label class="control-label">Gender <span style="color:#ff0000;">*</span></label>
+													   <div class="controls">
+														 <label class="radio">
+                                                       <input type="radio" name="gender" value="Male" />
+                                                       Male
+                                                       </label>
+                                                       <label class="radio">
+                                                       <input type="radio" name="gender" value="Female"/>
+                                                       Female
+														</div>
+													   </div>
+                                                       <div class="control-group" style="margin-bottom:0px;">
+													  <label class="control-label">Postal Address <span style="color:#ff0000;">*</span></label>
+													   <div class="controls">
+														  <textarea name="postal_address" id="postal_address" class="span m-wrap"></textarea>
+														</div>
+													   </div>
                                                      <div class="control-group" style="margin-bottom:0px;">
 													  <label class="control-label">Phone <span style="color:#ff0000;">*</span></label>
 													   <div class="controls">
-														  <input type="text" class="span m-wrap" name="Phone"  id="Phone" value="<?=$_REQUEST['Phone']?>" />
+														 <div id="phone_number_div">
+                                                 <button type="button" class="r-btnAdd">Add +</button>
+        <div class="r-group">
+               <select name="client[0][posphone]" id="client_0_posphone" data-pattern-name="client[++][posphone]" data-pattern-id="client_++_posphone"  onChange="check_contact_person(this.value);" style="width:55%"  >
+    	<option value="Manager">Manager</option>
+        <option value="Admin">Admin</option>
+        <option value="Payroll">Payroll</option>
+        <option value="Nurse In-Charge">Nurse In-Charge</option>
+        <option value="Other">Other</option>
+    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
+                <input type="text" name="client[0][phone]" id="client_0_phone" data-pattern-name="client[++][phone]" data-pattern-id="client_++_phone" />
+            <p>
+                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
+                <button type="button" class="r-btnRemove">Remove -</button>
+            </p>
+        </div>
+        
+    </div>
 														</div>
 													   </div>
 													
-                                                   <div class="control-group" style="margin-bottom:0px;">											  
+                                                   <!--<div class="control-group" style="margin-bottom:0px;">											  
                                                           <label class="control-label">Confirm Password <span style="color:#ff0000;">*</span></label> 
                                                         <div class="controls relative"> 
                                                             <input type="password"  name="cpassword" id="cpassword" class="span m-wrap" />
                                                            </div>
-                                                    </div>	
-                                                    
-													
+                                                    </div>-->	
+                                            	
+					
 													
 													   
 													    <div class="control-group" style="margin-bottom:0px;">
@@ -442,12 +529,40 @@
 													   <div class="control-group" style="margin-bottom:0px;">											  
                                                           <label class="control-label">Qualification <span style="color:#ff0000;">*</span></label> 
                                                         <div class="controls relative"> 
-                                                            <input type="text" name="qualification" id="qualification" class="span m-wrap" placeholder="RN/EEN/PCA" />
+                                                            <input type="text" name="qualification" id="qualification" class="span m-wrap" placeholder="" />
                                                            </div>
                                                     </div>
-
-													
-                                                 <div class="control-group" style="margin-bottom:0px;">
+<div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">AHPRA Registration Number <span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="AHPRA_gegistration_number" id="AHPRA_gegistration_number" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+                                                    <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">AHPRA Registration valid till<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="AHPRA_gegistration_valid" id="AHPRA_gegistration_valid" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+                                                    <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">Police Check Number<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="police_check_number" id="police_check_number" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+                                                    <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">Police Check Valid Till<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="police_check_valid" id="police_check_valid" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+                                                    <div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">First Aid Valid Till<span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls relative"> 
+                                                            <input type="text" name="first_aid_valid" id="first_aid_valid" class="span m-wrap" placeholder="" />
+                                                           </div>
+                                                    </div>
+                                              <!--   <div class="control-group" style="margin-bottom:0px;">
                                                   <label class="control-label" >Email Verification </label>
                                                     <div class="controls">                                                
                                                        <label class="radio">
@@ -473,7 +588,7 @@
                                                        No
                                                        </label>  
                                                     </div>
-                                               </div>
+                                               </div>-->
                																	
 										</div>
 												   
@@ -819,6 +934,57 @@
 		$.post('ajax/statusvideo.php',{ stat : stat , id : id });
 	}
 </script>
+
+<!------    repeater js ------->
+<script type="text/javascript" src="js/jquery.form-repeater.js"></script>
+<script type="text/javascript">
+ $(document).removeClass(function() {
+  $('#phone_number_div').repeater({
+      btnAddClass: 'r-btnAdd',
+      btnRemoveClass: 'r-btnRemove',
+      groupClass: 'r-group',
+      minItems: 1,
+      maxItems: 0,
+      startingIndex: 0,
+      reindexOnDelete: true,
+      repeatMode: 'append',
+      animation: null,
+      animationSpeed: 400,
+      animationEasing: 'swing',
+      clearValues: true
+  });
+   $('#fax_number_div').repeater({
+      btnAddClass: 'r-btnAdd',
+      btnRemoveClass: 'r-btnRemove',
+      groupClass: 'r-group',
+      minItems: 1,
+      maxItems: 0,
+      startingIndex: 0,
+      reindexOnDelete: true,
+      repeatMode: 'append',
+      animation: null,
+      animationSpeed: 400,
+      animationEasing: 'swing',
+      clearValues: true
+  });
+   $('#email_div').repeater({
+      btnAddClass: 'r-btnAdd',
+      btnRemoveClass: 'r-btnRemove',
+      groupClass: 'r-group',
+      minItems: 1,
+      maxItems: 0,
+      startingIndex: 0,
+      reindexOnDelete: true,
+      repeatMode: 'append',
+      animation: null,
+      animationSpeed: 400,
+      animationEasing: 'swing',
+      clearValues: true
+  });
+  });
+  </script>
+  <!----- repeater js end --------------------->
+
 	<!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

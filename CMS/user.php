@@ -1,9 +1,8 @@
 <?php include"lib/header.php";
-		
-			
 				//Insert User Registration			  
 			if($_REQUEST['submit']=="Save")
 			{	                         
+				//print_r($_REQUEST); die("manish");
 				$fname = $_REQUEST['firstname'];     
 				$lname = $_REQUEST['lastname']; 
 				$businessName = $_REQUEST['business_name'];
@@ -12,11 +11,8 @@
 				$password = mysql_real_escape_string(stripslashes($_REQUEST['password']));  
 				$Phone = $_REQUEST['Phone'];
 				$Address = addslashes($_REQUEST['Address']);
-				
-				
 				$oldimg = $_REQUEST['oldimg']; 
-				
-								//Registration No.
+			//Registration No.
 				$ip = $_SERVER['REMOTE_ADDR'];
 				$date = date('d-m-Y g:i:s a');
 				$usercreationdate = date('Y-m-d');
@@ -314,6 +310,37 @@
 				}	
 			
 ?>	
+<style>
+.r-btnAdd{
+background-color:transparent;
+border:none;
+    color: #0d638f;
+    outline:none;
+    position: absolute;
+    top: -25px;
+}
+#fax_number_div,#email_div,#phone_number_div{
+position:relative;
+}
+
+#fax_number_div button{
+left:100px
+}
+#email_div button{
+left:50px
+}
+#phone_number_div button{
+left:110px
+}
+.control-group {
+    /* float: left; */
+    margin-top: 21px;
+}
+.new-input{
+margin-left:2%;
+width:45%
+}
+</style>
 <!-- END LightBox View -->
 
 	<div class="page-container row-fluid">
@@ -435,9 +462,9 @@
 										<div class="row-fluid">
 										   <div class="span6">																	
                                             <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Company/Trust/Client Name* <span style="color:#ff0000;">*</span></label>
+                                              <label class="control-label">Company/Trust/Client Name <span style="color:#ff0000;">*</span></label>
                                                <div class="controls">
-                                                  <input type="text" class="span m-wrap"  name="client_name" id="firstname" value="" />
+                                                  <input type="text" class="span m-wrap"  name="client_name" id="client_name" value="" />
                                                 </div>
                                                </div>
 											   
@@ -448,12 +475,7 @@
                                                 </div>
                                                </div>
                                                
-                                              <div class="control-group" style="margin-bottom:0px;">											  
-                                                         <label class="control-label">Email <span style="color:#ff0000;">*</span></label> 
-                                                        <div class="controls relative"> 
-                                                            <input type="text"  name="email" id="email" class="span m-wrap" value="" />
-                                                           </div>
-                                                    </div>	
+                                              	
 													
 											  <div class="control-group" style="margin-bottom:0px;">
 													  <label class="control-label">Street Address <span style="color:#ff0000;">*</span></label>
@@ -461,18 +483,59 @@
 														  <textarea class="span m-wrap" name="street_address"  id="street_address" rows="4" ></textarea>
 														</div>
 													   </div>
+                                                       
                                                        <div class="control-group" style="margin-bottom:0px;">
-													  <label class="control-label">Website <span style="color:#ff0000;">*</span></label>
-													   <div class="controls">
-														  <textarea class="span m-wrap" name="website"  id="website" rows="4" ></textarea>
-														</div>
-													   </div>
-                                                       <div class="control-group" style="margin-bottom:0px;">
-													  <label class="control-label">Upload photo / Logo <span style="color:#ff0000;">*</span></label>
+													  <label class="control-label">Upload photo / Logo</label>
 													   <div class="controls">
 														  <input type="file" class="span m-wrap" name="client_file"  id="client_file" />
 														</div>
 													   </div>
+                                                       <div class="control-group" style="margin-bottom:0px;">
+                                                  <label class="control-label" >Email(s)</label>
+                                                    <div id="email_div">
+                                                 <button type="button" class="r-btnAdd">Add New</button>
+        <div class="r-group">
+               <select name="client[0][pos_for_email]" id="client_0_pos_for_email" data-pattern-name="client[++][pos_for_email]" data-pattern-id="client_++_pos_for_email" onChange="check_contact_person(this.value);" style="width:50%"  >
+    	<option value="Manager">Manager</option>
+        <option value="Admin">Admin</option>
+        <option value="Payroll">Payroll</option>
+        <option value="Nurse In-Charge">Nurse In-Charge</option>
+        <option value="Other">Other</option>
+    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
+                <div>
+		<input type="text" name="client[0][email]" id="client_0_email" data-pattern-name="client[++][email]" data-pattern-id="client_++_email" />
+            </div>
+	    
+                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
+                <button type="button" class="r-btnRemove">Remove -</button>
+            
+        </div>
+        
+    </div>
+                                               </div>
+                                               <div class="control-group" style="margin-bottom:0px;">
+                                                  <label class="control-label" >Fax Number(s)</label>
+                                                    <div id="fax_number_div">
+                                                 <button type="button" class="r-btnAdd">Add New</button>
+        <div class="r-group">
+               <select name="client[0][posfax]" id="client_0_posfax" data-pattern-name="client[++][posfax]" data-pattern-id="client_++_posfax"  onChange="check_contact_person(this.value);" style="width:50%"  >
+    	<option value="Manager">Manager</option>
+        <option value="Admin">Admin</option>
+        <option value="Payroll">Payroll</option>
+        <option value="Nurse In-Charge">Nurse In-Charge</option>
+        <option value="Other">Other</option>
+    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
+                <div>
+		<input type="text" name="client[0][fax]" id="client_0_fax" data-pattern-name="client[++][fax]" data-pattern-id="client_++_fax" />
+            </div>
+	   
+                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
+                <button type="button" class="r-btnRemove">Remove -</button>
+            
+        </div>
+        
+    </div>
+                                               </div>
                                                
                                             <!-- <div class="control-group" style="margin-bottom:0px;">											  
                                                           <label class="control-label">Password <span style="color:#ff0000;">*</span></label> 
@@ -510,8 +573,21 @@
 														  <input type="text" class="span m-wrap" name="abn"  id="abn" value="" />
 														</div>
 													   </div>
+
+                                                    <div class="control-group" style="margin-bottom:0px;">
+													  <label class="control-label">Website</label>
+													   <div class="controls">
+														  <input type class="span m-wrap" name="website"  id="website" rows="4" />
+														</div>
+													   </div>
+                                                      
+													<div class="control-group" style="margin-bottom:0px;">											  
+                                                          <label class="control-label">postal Address  <span style="color:#ff0000;">*</span></label> 
+                                                        <div class="controls">
+														  <textarea class="span m-wrap" name="postal_address"  id="postal_address" rows="4" ></textarea>
+														</div>
+                                                    </div>
                                                     
-													
                                                 
                                                     
 													 <div class="control-group" style="margin-bottom:0px;">
@@ -519,93 +595,49 @@
 													   <div class="controls">
 												 <div id="contact_person_field_reapeater">
     <div id="contact_person_p_1" class="contact_person_class">
-    <select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:55%" >
+    <select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:50%" >
     	<option value="Manager">Manager</option>
         <option value="Admin">Admin</option>
         <option value="Payroll">Payroll</option>
         <option value="Nurse In-Charge">Nurse In-Charge</option>
         <option value="Other">Other</option>
     </select>
-        &nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="email" name="contact_person_email[]" placeholder="Enter Email ID" style="width:50%"   value="" /> <a onclick = "return delete_field(1);" style="cursor:pointer">Delete</a></div> 
+        &nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="text" name="contact_person_name[]" placeholder="Enter Name" style="width:50%"   value="" /> <a onclick = "return delete_field(1);" style="cursor:pointer">Delete</a></div> 
   </div>
   <p id="contact_person_limit_msg" style="color:red"></p>		 
 														</div>
                                                         <div style="clear:both"></div>
 													   </div>
-													    <div class="control-group" style="margin-bottom:0px;">											  
-                                                          <label class="control-label">postal Address  <span style="color:#ff0000;">*</span></label> 
-                                                        <div class="controls">
-														  <textarea class="span m-wrap" name="postal_address"  id="postal_address" rows="4" ></textarea>
-														</div>
-                                                    </div> 
+													     
 													 
 													 <div class="control-group" style="margin-bottom:0px;">
                                                       <label class="control-label">Phone Number  <span style="color:#ff0000;">*</span></label> 
                                                  <div id="phone_number_div">
-                                                 <button type="button" class="r-btnAdd">Add +</button>
+                                                 <button type="button" class="r-btnAdd">Add New</button>
         <div class="r-group">
-               <select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:55%"  >
+               <select name="client[0][posphone]" id="client_0_posphone" data-pattern-name="client[++][posphone]" data-pattern-id="client_++_posphone"  onChange="check_contact_person(this.value);" style="width:50%"  >
     	<option value="Manager">Manager</option>
         <option value="Admin">Admin</option>
         <option value="Payroll">Payroll</option>
         <option value="Nurse In-Charge">Nurse In-Charge</option>
         <option value="Other">Other</option>
     </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
-                <input type="text" name="vehicle[0][type]" id="vehicle_0_type" data-pattern-name="vehicle[++][type]" data-pattern-id="vehicle_++_type" />
-            <p>
-                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
+                <div>
+		<input type="text" name="client[0][phone]" id="client_0_phone" data-pattern-name="client[++][phone]" data-pattern-id="client_++_phone" />
+            </div>
+	         <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
                 <button type="button" class="r-btnRemove">Remove -</button>
-            </p>
+           
         </div>
         
     </div>
                                                </div>  
 													  
 													
-                                                 <div class="control-group" style="margin-bottom:0px;">
-                                                  <label class="control-label" >Fax Number(s)</label>
-                                                    <div id="fax_number_div">
-                                                 <button type="button" class="r-btnAdd">Add +</button>
-        <div class="r-group">
-               <select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:55%"  >
-    	<option value="Manager">Manager</option>
-        <option value="Admin">Admin</option>
-        <option value="Payroll">Payroll</option>
-        <option value="Nurse In-Charge">Nurse In-Charge</option>
-        <option value="Other">Other</option>
-    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
-                <input type="text" name="vehicle[0][type]" id="vehicle_0_type" data-pattern-name="vehicle[++][type]" data-pattern-id="vehicle_++_type" />
-            <p>
-                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
-                <button type="button" class="r-btnRemove">Remove -</button>
-            </p>
-        </div>
-        
-    </div>
-                                               </div>
-                                               <div class="control-group" style="margin-bottom:0px;">
-                                                  <label class="control-label" >Email(s)</label>
-                                                    <div id="email_div">
-                                                 <button type="button" class="r-btnAdd">Add +</button>
-        <div class="r-group">
-               <select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:55%"  >
-    	<option value="Manager">Manager</option>
-        <option value="Admin">Admin</option>
-        <option value="Payroll">Payroll</option>
-        <option value="Nurse In-Charge">Nurse In-Charge</option>
-        <option value="Other">Other</option>
-    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
-                <input type="text" name="vehicle[0][type]" id="vehicle_0_type" data-pattern-name="vehicle[++][type]" data-pattern-id="vehicle_++_type" />
-            <p>
-                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
-                <button type="button" class="r-btnRemove">Remove -</button>
-            </p>
-        </div>
-        
-    </div>
-                                               </div>
+                                                 
                                                
-                                               <div class="control-group" style="margin-bottom:0px;">
+                                               
+                                               <!--<div class="control-group" style="margin-bottom:0px;">
                                                   <label class="control-label" >User Status</label>
                                                     <div class="controls">                                                
                                                        <label class="radio">
@@ -617,7 +649,7 @@
                                                        No
                                                        </label>  
                                                     </div>
-                                               </div>
+                                               </div>-->
                																	
 										</div>
 												   
@@ -667,6 +699,19 @@
     <script type="text/javascript" src="assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
      <script  language="javascript" src="../js/frm_validator.js"></script>
+     <script>
+$('select').change(function(){
+var value=$(this).val();
+
+if(value=="Other"){
+$(this).addClass("abc")
+$(this).after( "<input type='text' name='' class='new-input'>" );
+}
+else{
+$(this).next('input').remove();
+}
+})
+</script>
 	<script type="text/javascript" language="javascript1.2">
     function check()
     { 
@@ -973,7 +1018,7 @@
 			if(numItems <10){
 			//var field_html = '<p id="contact_person_p_'+field_sr+'"  class="contact_person_class"><input type="text"   name="organization_position[]"  placeholder="date"  style="width:30%"> <input type="email" name="contact_person_email[]" placeholder="Contact person email id" style="width:50%" /> <a onclick = "return delete_field('+field_sr+');"  style="cursor:pointer">Delete</a></p>';
 			
-			var field_html = '<div style="clear:both"></div><div id="contact_person_p_'+field_sr+'" class="contact_person_class" style="float:left"><select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:65%" ><option value="Manager">Manager</option><option value="Admin">Admin</option><option value="Payroll">Payroll</option><option value="Nurse In-Charge">Nurse In-Charge</option><option value="Other">Other</option></select>&nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="email" name="contact_person_email[]" placeholder="Enter Email ID" style="width:50%"   value="" /> <a onclick = "return delete_field('+field_sr+');" style="cursor:pointer">Delete</a></div>';
+			var field_html = '<div style="clear:both"></div><div id="contact_person_p_'+field_sr+'" class="contact_person_class" style="float:left"><select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:65%" ><option value="Manager">Manager</option><option value="Admin">Admin</option><option value="Payroll">Payroll</option><option value="Nurse In-Charge">Nurse In-Charge</option><option value="Other">Other</option></select>&nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="email" name="contact_person_email[]" placeholder="Enter Name" style="width:50%"   value="" /> <a onclick = "return delete_field('+field_sr+');" style="cursor:pointer">Delete</a></div>';
 			$("#contact_person_field_reapeater").append(field_html);
 			$("#contact_person_limit_msg").html("");
 			}else{

@@ -361,36 +361,36 @@ if($_REQUEST['submitdetail']  == 'Update')
 						<div class="portlet box grey">
 							<div class="portlet-title">
 								<div class="caption"><i class="icon-reorder"></i><?=$pagetitle?></div>
-								<div class="tools">
+								<!--<div class="tools">
 									<a href="javascript:;" class="collapse"></a>
 									<a href="#portlet-config" data-toggle="modal" class="config"></a>
 									<a href="javascript:;" class="reload"></a>
 									<a href="javascript:;" class="remove"></a>
-								</div>
+								</div>-->
 							</div>
 							<div class="portlet-body">
 								<div class="table-toolbar">
 									 <div class="btn-group">
 										<a class="btn blue" data-toggle="modal" href="user.php?mode=add">Add New <i class="icon-plus"></i></a>
 									</div>
-                                    <div class="btn-group pull-right">
+                                    <!--<div class="btn-group pull-right">
 									<button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i>
 									</button>
 									<ul class="dropdown-menu">
 										<li><a onclick="delselected()" style="cursor:pointer">Delete Selected</a></li>
 									</ul>
-								    </div>
+								    </div>-->
 								</div>
 						<div id="tablesec">
 							<table class="table table-striped table-bordered table-hover" id="sample_2">						
 								<thead>
 									<tr>
-									 	<th class="hidden-480"><input type="checkbox" class="group-checkable" data-set="#sample_2 .checkboxes" /></th> 
-										<th class="hidden-480">Image</th>
+									 	<th class="hidden-480">Sr. No</th> 
 										<th class="hidden-480">Client ID</th>
-										<th class="hidden-480">Name of Business</th>
-										<th class="hidden-480">Name</th>
-										<th class="hidden-480">Email</th>
+										<th class="hidden-480">Company Name</th>
+										<th class="hidden-480">Trading as</th>
+										<th class="hidden-480">ABN</th>
+										<th class="hidden-480">Phone Number</th>
 										<!--
 										<th class="hidden-480">Status</th>
 										-->
@@ -423,16 +423,10 @@ if($_REQUEST['submitdetail']  == 'Update')
 									?>
 									<tr class="odd gradeX">
                                     	<td class="hidden-480">
-                                    	<input type="checkbox" class="checkboxes" value="<?=$rowdest['Uid']?>" name="feed[]"/>
+                                    	<?=$ctn?>
                                         </td>
-										<td style="width:60px;">
-                                        	
-												<div class="tile-body">
-                                                <img src="<?=$proset?>" alt="Wait..." title="<?=stripslashes($rowdest['FirstName'])?>">
-                                                </div>	
-                                            	
-                                        </td>
-										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['RegistrationNo']?></div></td>
+										<td class="hidden-480"><?php echo $rowdest['RegistrationNo']; ?> </td>
+										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['BusinessName']?></div></td>
 										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['BusinessName']?></div></td>
 										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['FirstName'].' '.$rowdest['LastName']?></div></td>
                                    

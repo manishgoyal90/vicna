@@ -427,7 +427,13 @@ $(".dt_pic").datepicker({
 			padding: 0;
 		}
 	</style>
-
+<style>
+    .pref-table,.pref-table tr, .pref-table tr td {
+        width: 100%;
+    border-left: none;
+        text-align: center;
+    }
+</style>
 <!-- BEGIN CONTAINER -->
 <div class="page-container row-fluid"> 
   <!-- BEGIN SIDEBAR -->
@@ -499,7 +505,7 @@ $(".dt_pic").datepicker({
           <div class="tabbable tabbable-custom tabbable-full-width">
             <ul class="nav nav-tabs">
               <li <?php if(isset($_REQUEST['update']) || isset($_REQUEST['invoice'])){echo 'class=""';}else{echo 'class="active"';}?>><a href="#tab_1_1" data-toggle="tab">Profile</a></li>
-              <li <?php if(isset($_REQUEST['update'])){echo 'class="active"';}else{echo 'class=""';}?>><a href="#tab_1_2" data-toggle="tab">Billing Information</a></li>
+              <li <?php if(isset($_REQUEST['update'])){echo 'class="active"';}else{echo 'class=""';}?>><a href="#tab_1_2" data-toggle="tab">Bookings</a></li>
               <li <?php if(isset($_REQUEST['invoice'])){echo 'class="active"';}else{echo 'class=""';}?>><a href="#tab_1_3" data-toggle="tab">All Invoice</a></li>
               <!-- <li><a href="#tab_1_7" data-toggle="tab">My Settings</a></li>
 								 <li><a href="#tab_1_6" data-toggle="tab">Member Privilege</a></li>--> 
@@ -561,14 +567,14 @@ $(".dt_pic").datepicker({
                               <?=base64_decode($rowdest7['Password'])?>
                             </p></td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                           <td><p><i class="icon-male"></i>&nbsp;Sex</p></td>
                           <td><p>:</p></td>
                           <td><p>
                               <?php if($rowdest7['Gender']!='') { echo $rowdest7['Gender'] ; } else { echo "N/A"; } ?>
                             </p></td>
-                        </tr>
-                        <tr>
+                        </tr>-->
+<!--                        <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Country </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
@@ -589,7 +595,7 @@ $(".dt_pic").datepicker({
                               <?=$rowdest7['City']?>
                             </p></td>
                         </tr>
-                        <tr>
+-->                        <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Address </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
@@ -617,13 +623,13 @@ $(".dt_pic").datepicker({
                               <?=$rowdest7['ZipCode']?>
                             </p></td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;BusinessName </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
                               <?=$rowdest7['BusinessName']?>
                             </p></td>
-                        </tr>
+                        </tr>-->
                         <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;TradingName </p></td>
                           <td><p>:</p></td>
@@ -799,207 +805,347 @@ $(".dt_pic").datepicker({
               <div class="tab-pane profile-classic <?php if(isset($_REQUEST['update'])){echo 'active';}else{echo '';}?> row-fluid" id="tab_1_2">
                 <div class="row-fluid">
                   <div class="span profile-info">
-                    <h3>Billing Information&nbsp;
-                      <button id="edit_btn" onClick="edit_booking();" class="btn mini blue">Edit <i class="icon-edit"></i></button>
+                    <h3>Bookings&nbsp;
+                      <!--<button id="edit_btn" onClick="edit_booking();" class="btn mini blue">Edit <i class="icon-edit"></i></button>-->
                       &nbsp;</h3>
-                    <div class="col-md-12" id="booking_info">
-                      <?php
-															//Fetch Subscription Id From order table
-															$FetchUserSqlp = "SELECT * FROM billing_dtls WHERE clientId  = '".$_REQUEST['Uid']."'";
-															$FetchUserQueryp = mysql_query($FetchUserSqlp);
-															$FetchRowsp = mysql_fetch_array($FetchUserQueryp);
-															//Fetch Subscription
-															/*$FetchUserSubSql = "SELECT * FROM ".TABLE_PREFIX."subscription WHERE subscription_Id = '".$FetchRowsp['subscription_Id']."'";
-															$FetchUserSubQuery = mysql_query($FetchUserSubSql);
-															$FetchRowsSub = mysql_fetch_array($FetchUserSubQuery);*/
-													   ?>
-                      <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="sample_2">
-                          <tbody>
-                            <tr>
-                              <td width="20%"><p>Business Name</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['businessName']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Trading Name</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['tradingName']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>ABN</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['abn']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Business Address</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['businessAddress']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Postal Address</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['postalAddress']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Business Phone</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['phone']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Business Email</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['email']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Business Fax</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['fax']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Business Contact</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['businessContact']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Invoice Via</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['invoicesVia']?>
-                                </p></td>
-                            </tr>
-                            <tr>
-                              <td width="20%"><p>Date</p></td>
-                              <td width="5%"><p>:</p></td>
-                              <td><p>
-                                  <?=$FetchRowsp['dt']?>
-                                </p></td>
-                            </tr>
-                          </tbody>
-                        </table>
+                   
+
+
+
+
+
+
+                      <div class="tabbable tabbable-custom tabbable-full-width">
+                          <ul class="nav nav-tabs">
+                              <li class="active"><a href="#tab_2_1" data-toggle="tab">Make a New Booking</a></li>
+                              <li><a href="#tab_2_2" data-toggle="tab">Manage Bookings</a></li>
+                              <li><a href="#tab_2_3" data-toggle="tab">Completed Shifts</a></li>
+                              <li><a href="#tab_2_4" data-toggle="tab">Feedbacks</a></li>
+                              <li><a href="#tab_2_5" data-toggle="tab">Preferences</a></li>
+                              <!-- <li><a href="#tab_1_7" data-toggle="tab">My Settings</a></li>
+                               <li><a href="#tab_1_6" data-toggle="tab">Member Privilege</a></li>-->
+                              <!--<li><a href="#tab_1_4" data-toggle="tab">Course Reviews</a></li>-->
+                          </ul>
+                          <div class="tab-content">
+                              <div class="tab-pane row-fluid active" id="tab_2_1">
+                                  <div class="row-fluid">
+                                      <div class="span6">
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Company/Trust/Client Name</label>
+                                              <div class="controls">
+                                                  <input type="text" class="span m-wrap" name="client_name" id="client_name" value="" readonly>
+                                              </div>
+                                          </div>
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Trading as</label>
+                                              <div class="controls">
+                                                  <input type="text" class="span m-wrap" name="trading_as" id="trading_as" value="" readonly>
+                                              </div>
+                                          </div>
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Street Address</label>
+                                              <div class="controls">
+                                                  <textarea class="span m-wrap" name="street_address" id="street_address" rows="4" readonly></textarea>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="span6">
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Phone No.</label>
+                                              <div class="controls">
+                                                  <input type="text" class="span m-wrap" name="trading_as" id="phone-no" value="" readonly>
+                                              </div>
+                                          </div>
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Fax Number</label>
+                                              <div class="controls">
+                                                  <input type="text" class="span m-wrap" name="trading_as" id="fax_no" value="" readonly>
+                                              </div>
+                                          </div>
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Email</label>
+                                              <div class="controls">
+                                                  <input type="email" class="span m-wrap" name="trading_as" id="email" value="" readonly>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="span12" style="margin-left:0">
+                                          <div class="control-group" style="margin-bottom:0px;">
+                                              <label class="control-label">Shift Requested By</label>
+                                              <div class="controls">
+                                                  <input type="text" class="span m-wrap" name="trading_as" id="shift_requested" value="" readonly>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="span12 " style="margin-left:0">
+
+                                          <h2>Shift Details</h2>
+                                          <div class="row-fluid">
+                                              <div class="span6">
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Address</label>
+                                                      <div class="controls">
+                                                          <textarea class="span m-wrap" name="street_address" id="Address" rows="4"></textarea>
+                                                      </div>
+                                                  </div>
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Area/Ward</label>
+                                                      <div class="controls">
+                                                          <input type="text" class="span m-wrap" name="trading_as" id="area_ward" value="">
+                                                      </div>
+                                                  </div>
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Qualification</label>
+                                                      <div class="controls">
+                                                          <input type="email" class="span m-wrap" name="trading_as" id="Qualification" value="">
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="span6">
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Date</label>
+                                                      <div class="controls">
+                                                          <input type="text" class="span m-wrap" name="trading_as" id="Date" value="">
+                                                      </div>
+                                                  </div>
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Time</label>
+                                                      <div class="controls">
+                                                          <input type="text" class="span m-wrap" name="trading_as" id="Time" value="">
+                                                      </div>
+                                                  </div>
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Speciality(if any)</label>
+                                                      <div class="controls">
+                                                          <input type="email" class="span m-wrap" name="trading_as" id="Speciality" value="">
+                                                      </div>
+                                                  </div>
+                                                  <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Staff Requested</label>
+                                                      <div class="controls">
+                                                          <input type="email" class="span m-wrap" name="trading_as" id="staff_req" value="">
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+    
+                                          <div class="span12" style="margin-left:0">
+                                              <div class="control-group" style="margin-bottom:0px;">
+                                                  <label class="control-label">Comments</label>
+                                                  <div class="controls">
+                                                      <textarea class="span m-wrap" name="street_address" id="Comments" rows="4"></textarea>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="modal-footer" style="text-align:left;float: left;width: 100%;">
+                                              <input type="submit" class="btn blue" name="submit" value="Update">
+                                          </div>
+                                      </div>
+
+                            
+                                  </div>                              
+                              </div>
+
+                              <!--end tab-pane-->
+                              <div class="tab-pane profile-classic row-fluid" id="tab_2_2">
+                                  <div class="row-fluid">
+                                      <div class="span profile-info">
+                                          <h3>
+                                             Manage Bookings
+                                          </h3>
+                                          <div class="col-md-12" id="">
+                                              <div id="tablesec">
+                                                  <table class="table table-striped table-bordered table-hover" id="sample_22">
+                                                      <thead>
+                                                          <tr>
+                                                              <th class="hidden-480">Address</th>
+                                                              <th class="hidden-480">Area/Ward</th>
+                                                              <th class="hidden-480">Date</th>
+                                                              <th class="hidden-480">Time</th>
+                                                              <th class="hidden-480">Qualification</th>
+                                                              <th class="hidden-480">Speciality</th>
+                                                              <th class="hidden-480">Vicna Staff Requested</th>
+                                                              <th class="hidden-480">Comments</th>
+                                                              <th class="hidden-480">Vicna Staff Booked</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr class="odd gradeX">
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                          </tr>
+                                             
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <!--tab_1_2-->
+                              <!--tab_1_3-->
+
+                              <div class="tab-pane profile-classic row-fluid" id="tab_2_3">
+                                  <div class="row-fluid">
+                                      <div class="span profile-info">
+                                          <h3>
+                                              Completed Shifts
+                                          </h3>
+                                          <div class="col-md-12" id="">
+                                              <div id="tablesec">
+                                                  <table class="table table-striped table-bordered table-hover" id="sample_23">
+                                                      <thead>
+                                                          <tr>
+                                                              <th class="hidden-480">Address</th>
+                                                              <th class="hidden-480">Area/Ward</th>
+                                                              <th class="hidden-480">Date</th>
+                                                              <th class="hidden-480">Time</th>
+                                                              <th class="hidden-480">Qualification</th>
+                                                              <th class="hidden-480">Speciality</th>
+                                                              <th class="hidden-480">Vicna Staff Booked</th>
+                                                              <th class="hidden-480">Action</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr class="odd gradeX">
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">
+                                                                  <a href="#">Add To Favourite</a><br />
+                                                                  <a href="#">Add To Do Not Send List</a><br />
+                                                                  <a href="#">Provide Feedback</a>
+                                                              </td>
+                                                          </tr>
+
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="tab-pane profile-classic row-fluid" id="tab_2_4">
+                                  <div class="row-fluid">
+                                      <div class="span profile-info">
+                                          <h3>
+                                            Feedbacks
+                                          </h3>
+                                          <div class="col-md-12" id="">
+                                              <div id="tablesec">
+                                                  <table class="table table-striped table-bordered table-hover" id="sample_24">
+                                                      <thead>
+                                                          <tr>
+                                                              <th class="hidden-480">Client's Representative</th>
+                                                              <th class="hidden-480">Position</th>
+                                                              <th class="hidden-480">Feedbcak</th>
+                                                              <th class="hidden-480">Vicna Staff (if any)</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr class="odd gradeX">
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                              <td class="hidden-480">abf</td>
+                                                          </tr>
+
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="tab-pane profile-classic row-fluid" id="tab_2_5">
+                                  <div class="row-fluid">
+                                      <div class="span profile-info">
+                                          <h3>
+                                              Preferences
+                                          </h3>
+                                          <div class="col-md-12" id="">
+                                              <div id="tablesec">
+                                                  <table class="table table-striped table-bordered table-hover" id="sample_26">
+                                                      <thead>
+                                                          <tr>
+                                                              <th class="hidden-480" style="text-align:center">Favorites List</th>
+                                                              <th class="hidden-480" style="text-align:center">Do Not Send List</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <tr class="odd gradeX">
+                                                              <td class="hidden-480">
+                                                                  <table class="pref-table">
+                                                                      <tbody>
+                                                                          <tr>
+                                                                              <td>asc</td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                              <td>sdd</td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                              <td><a href="#">Add More</a></td>
+                                                                          </tr>
+                                                                      </tbody>
+                                                                  </table>
+                                                              </td>
+                                                              <td class="hidden-480">
+                                                                  <table class="pref-table">
+                                                                      <tbody>
+                                                                          <tr>
+                                                                              <td>asc</td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                              <td>sdd</td>
+                                                                          </tr>
+                                                                          <tr>
+                                                                              <td><a href="#">Add More</a></td>
+                                                                          </tr>
+                                                                      </tbody>
+                                                                  </table>
+                                                              </td>
+                                                          </tr>
+
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <!--tab_1_3-->
+
+                          </div>
+                          <!--end tab-pane-->
                       </div>
-                    </div>
-                    <div class="col-md-12" id="edit_booking_info" style="display:none;">
-                      <?php
-															//Fetch Subscription Id From order table
-															$FetchUserSqlp = "SELECT * FROM billing_dtls WHERE clientId  = '".$_REQUEST['Uid']."'";
-															$FetchUserQueryp = mysql_query($FetchUserSqlp);
-															$FetchRowsp = mysql_fetch_array($FetchUserQueryp);
-															//Fetch Subscription
-															/*$FetchUserSubSql = "SELECT * FROM ".TABLE_PREFIX."subscription WHERE subscription_Id = '".$FetchRowsp['subscription_Id']."'";
-															$FetchUserSubQuery = mysql_query($FetchUserSubSql);
-															$FetchRowsSub = mysql_fetch_array($FetchUserSubQuery);*/
-													   ?>
-                      <form action="" method="post" enctype="multipart/form-data">
-                        <div class="table-responsive">
-                          <input type="hidden" name="Uid" value="<?=$_REQUEST['Uid'];?>">
-                          <table class="table table-striped table-hover" id="sample_2">
-                            <tbody>
-                              <tr>
-                                <td width="20%"><p>Business Name</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="text" name="businessName" value="<?=$FetchRowsp['businessName']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Trading Name</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="text" name="tradingName" value="<?=$FetchRowsp['tradingName']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>ABN</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="text" name="abn" value="<?=$FetchRowsp['abn']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Business Address</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="text" name="businessAddress" value="<?=$FetchRowsp['businessAddress']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Postal Address</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="text" name="postalAddress" value="<?=$FetchRowsp['postalAddress']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Business Phone</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="number" name="phone" value="<?=$FetchRowsp['phone']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Business Email</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="email" name="email" value="<?=$FetchRowsp['email']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Business Fax</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="number" name="fax" value="<?=$FetchRowsp['fax']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Business Contact</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="number" name="businessContact" value="<?=$FetchRowsp['businessContact']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Invoice Via</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="text" name="invoicesVia" value="<?=$FetchRowsp['invoicesVia']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td width="20%"><p>Date</p></td>
-                                <td width="5%"><p>:</p></td>
-                                <td><p>
-                                    <input type="dateTime" name="dt" value="<?=$FetchRowsp['dt']?>">
-                                  </p></td>
-                              </tr>
-                              <tr>
-                                <td></td>
-                                <td></td>
-                                <td><input type="submit" id="update_btn" style="display:none;" class="btn large yellow" name="Update" value="Update"></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </form>
-                    </div>
+
+
+
+
+
+
+
+
+
+
+
                   </div>
                 </div>
               </div>
