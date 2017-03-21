@@ -425,12 +425,12 @@ if($_REQUEST['submitdetail']  == 'Update')
                                     	<td class="hidden-480">
                                     	<?=$ctn?>
                                         </td>
-										<td class="hidden-480"><?php echo $rowdest['RegistrationNo']; ?> </td>
+										<td class="hidden-480"><?php echo $rowdest['UserName']; ?> </td>
+										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['client_name']?></div></td>
+										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['TradingName']?></div></td>
 										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['BusinessName']?></div></td>
-										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['BusinessName']?></div></td>
-										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['FirstName'].' '.$rowdest['LastName']?></div></td>
                                    
-										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['EmailId']?></div></td>
+										<td class="hidden-480"><div class="videoWrapper"><?php $phone = unserialize($rowdest['Phone']); $phone_data =  implode(',',$phone); echo str_replace("@@","=>",$phone_data); ?></div></td>
 										<!-- <td class="hidden-480">
 											<div class="controls">
 											 <select class="span9 chosen" tabindex="1" id="stat<?=$rowdest['Uid']?>" onChange="changestatus(this.value,'<?=$rowdest['Uid']?>')">
