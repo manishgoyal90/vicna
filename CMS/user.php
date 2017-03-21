@@ -79,7 +79,7 @@ if($upload_image <> ''){
 	$upload_image = '';
 }
 
-mysql_query("insert into hr_user_registration(client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person,UserImage,UserName,Password) VALUES('".$client_name."','".$abn."','".$trading_as."','".serialize($email)."','".serialize($phone)."','".$website."','".$street_address."','".$postal_address."','".serialize($fax)."','".serialize($cp)."','".$upload_image."','".$username."','".$temp_pwd."') ") or die(mysql_error());
+mysql_query("insert into hr_user_registration(RegistrationNo,client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person,UserImage,UserName,Password) VALUES('','".$client_name."','".$abn."','".$trading_as."','".serialize($email)."','".serialize($phone)."','".$website."','".$street_address."','".$postal_address."','".serialize($fax)."','".serialize($cp)."','".$upload_image."','".$username."','".$temp_pwd."') ") or die(mysql_error());
 $_SESSION['username'] = $username;
 $_SESSION['temp_pwd'] = $temp_pwd;
 header("location:email_verification.php"); die;	
