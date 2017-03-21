@@ -1,318 +1,90 @@
 <?php include"lib/header.php";
 				//Insert User Registration			  
-			if($_REQUEST['submit']=="Save")
-			{	                         
-				//echo "<pre>";
-				//print_r($_REQUEST); 
-				$client_name = $_REQUEST['client_name'];     
-				$abn = $_REQUEST['abn']; 
-				$trading_as = $_REQUEST['trading_as'];
-				$website = $_REQUEST['website'];
-				$email = $_REQUEST['email'];
-				$password = mysql_real_escape_string(stripslashes($_REQUEST['password']));  
-				$street_address = $_REQUEST['street_address'];
-				$postal_address = $_REQUEST['postal_address'];
-				mysql_query("insert into hr_user_registration(client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person ) VALUES('".$client_name."','".$abn."','".$trading_as."','".$email."','".$website."','".$street_address."','".$postal_address."','".$fax."','".$contact_person."','".$contact_person."') ") or die(mysql_error());
-				header("location:email_verification.php"); die;
-				$oldimg = $_REQUEST['oldimg']; 
-				
-			//Registration No.
-				$ip = $_SERVER['REMOTE_ADDR'];
-				$date = date('d-m-Y g:i:s a');
-				$usercreationdate = date('Y-m-d');
-				/* unicId */
-				/*$prefix = "USR" . date("y") . date("m");
-				$pl = strlen($prefix);
-				$ql = $pl + 1;
-				$rn = "SELECT MAX(SUBSTR(RegistrationNo,$ql)) FROM " . TABLE_PREFIX . "user_registration where RegistrationNo like '%$prefix%'";
-				$res_rn = mysql_query($rn);
-				$row_rn = mysql_fetch_array($res_rn);
-				$id = $row_rn['0'];
-				$id = $id + 1;
-				$leadingzeros = '00000';
-				$RegistrationNo = $prefix . substr($leadingzeros, 0, (-strlen($id))) . $id;*/ 
-				
-				$year = date('Y');
-				$fetId = mysql_fetch_array(mysql_query("SELECT * FROM staff_cliend_id WHERE id = '2'"));
-				if($year == $fetId['year'])
-				{
-					$RegistrationNo = $fetId['lastId'] + 1;
-					$update = mysql_query("UPDATE staff_cliend_id SET lastId = '".$RegistrationNo."' WHERE id = '2'");
-				}else{
-					$lastId = $year.'000';
-					$update = mysql_query("UPDATE staff_cliend_id SET year = '".$year."', lastId = '".$lastId."' WHERE id = '2'");
-					$fetId = mysql_fetch_array(mysql_query("SELECT * FROM staff_cliend_id WHERE id = '2'"));
-					$RegistrationNo = $fetId['lastId'] + 1;
-					$update = mysql_query("UPDATE staff_cliend_id SET lastId = '".$RegistrationNo."' WHERE id = '2'");
+if($_REQUEST['submit']=="Save"){	                         
+				//echo "<pre>";print_r($_REQUEST);  die;
+function randomPrefix($length){ 
+	$random= "";
+	srand((double)microtime()*1000000);
+	$data = "AbcDE123IJKLMN67QRSTUVWXYZ"; 
+	$data .= "aBCdefghijklmn123opq45rs67tuv89wxyz"; 
+	$data .= "0FGH45OP89";
+	for($i = 0; $i < $length; $i++){ 
+		$random .= substr($data, (rand()%(strlen($data))), 1); 
+	}
+		return $random; 
+}
+function random_username($string) {
+$pattern = " ";
+$firstPart = strstr(strtolower($string), $pattern, true);
+$secondPart = substr(strstr(strtolower($string), $pattern, false), 0,3);
+$nrRand = rand(0, 100);
+
+$username = trim($firstPart).trim($secondPart).trim($nrRand);
+return $username;
+}
+$client_name = $_REQUEST['client_name'];     
+$abn = $_REQUEST['abn']; 
+$trading_as = $_REQUEST['trading_as'];
+$website = $_REQUEST['website'];
+$street_address = $_REQUEST['street_address'];
+$postal_address = $_REQUEST['postal_address'];
+$username = random_username($client_name);
+$temp_pwd = randomPrefix(13);
+for($i=0;$i<count($_REQUEST['email']);$i++){
+	if($_REQUEST['email'][$i]['address'] !=''){
+		if($_REQUEST['email'][$i]['pos'] == 'other'){
+			$other = $_REQUEST['email'][$i]['pos'];
+			$email[] = $_REQUEST['email'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['email'][$i]['address'];
+		}else{
+			$email[] = $_REQUEST['email'][$i]['pos']."@@".$_REQUEST['email'][$i]['address'];
+		}
+	}
+}
+for($i=0;$i<count($_REQUEST['fax']);$i++){
+	if($_REQUEST['fax'][$i]['address'] !=''){
+		if($_REQUEST['fax'][$i]['pos'] == 'other'){
+			$other = $_REQUEST['fax'][$i]['pos'];
+			$fax[] = $_REQUEST['fax'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['fax'][$i]['address'];
+		}else{
+			$fax[] = $_REQUEST['fax'][$i]['pos']."@@".$_REQUEST['fax'][$i]['address'];
+		}
+	}
+}
+for($i=0;$i<count($_REQUEST['cp']);$i++){
+	if($_REQUEST['cp'][$i]['address'] !=''){
+		if($_REQUEST['cp'][$i]['pos'] == 'other'){
+			$other = $_REQUEST['cp'][$i]['pos'];
+			$cp[] = $_REQUEST['cp'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['cp'][$i]['address'];
+		}else{
+			$cp[] = $_REQUEST['cp'][$i]['pos']."@@".$_REQUEST['cp'][$i]['address'];
+		}
+	}
+}
+for($i=0;$i<count($_REQUEST['phone']);$i++){
+	if($_REQUEST['phone'][$i]['address'] !=''){
+		if($_REQUEST['phone'][$i]['pos'] == 'other'){
+			$other = $_REQUEST['phone'][$i]['pos'];
+			$phone[] = $_REQUEST['phone'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['phone'][$i]['address'];
+		}else{
+			$phone[] = $_REQUEST['phone'][$i]['pos']."@@".$_REQUEST['phone'][$i]['address'];
+		}
+	}
+}
+
+$upload_image  = $_FILES['client_file']['name'];
+if($upload_image <> ''){
+	$upload_image = time()."_".$_FILES['client_file']['name'];
+	move_uploaded_file($_FILES['client_file']['tmp_name'],"upload/".$upload_image);
+}else{
+	$upload_image = '';
+}
+
+mysql_query("insert into hr_user_registration(client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person,UserImage,UserName,Password) VALUES('".$client_name."','".$abn."','".$trading_as."','".serialize($email)."','".serialize($phone)."','".$website."','".$street_address."','".$postal_address."','".serialize($fax)."','".serialize($cp)."','".$upload_image."','".$username."','".$temp_pwd."') ") or die(mysql_error());
+$_SESSION['username'] = $username;
+$_SESSION['temp_pwd'] = $temp_pwd;
+header("location:email_verification.php"); die;	
+}
 					
-				}
-				
-				// 13 Digit Random number generate function
-				function randomPrefix($length) 
-				{ 
-				$random= "";
-				srand((double)microtime()*1000000);
-				
-				$data = "AbcDE123IJKLMN67QRSTUVWXYZ"; 
-				$data .= "aBCdefghijklmn123opq45rs67tuv89wxyz"; 
-				$data .= "0FGH45OP89";
-				
-				for($i = 0; $i < $length; $i++) 
-				{ 
-				$random .= substr($data, (rand()%(strlen($data))), 1); 
-				}
-				
-				return $random; 
-				}
-				
-				randomPrefix(13); 
-				$rand=randomPrefix(13);
-				$rand; 
-				
-				//Checking Email Unique//
-				$CheckEmailSql = "SELECT EmailId FROM ".TABLE_PREFIX."user_registration WHERE EmailId = '".$email."'";
-				$CheckEmailQuery=mysql_query($CheckEmailSql) or mysql_error();
-				$CheckEmailRow=mysql_num_rows($CheckEmailQuery);
-
-			
-				if($CheckEmailRow=="0")
-				{
-				
-				/*	if($_FILES['image']['name']!=''){
-							
-							$unlink_sql = "SELECT UserImage FROM ".TABLE_PREFIX."user_registration WHERE Uid = '".$_SESSION['userid']."'";
-								$unlink_rs = mysql_query($unlink_sql) or mysql_error();
-								$row_unlink = mysql_fetch_array($unlink_rs);
-								
-								$photo = "profileimage/fullsize/".$row_unlink['UserImage'];
-								$thumb = "profileimage/bigimg/".$row_unlink['UserImage'];
-								$thumb1 = "profileimage/smallimg/".$row_unlink['UserImage'];
-								$thumb2 = "profileimage/medium/".$row_unlink['UserImage'];
-								$thumb3 = "profileimage/extbig/".$row_unlink['UserImage'];
-								
-								if(file_exists($photo))
-									{
-										@unlink($photo);
-									}
-								if(file_exists($thumb))
-									{
-										@unlink($thumb);
-									}
-								if(file_exists($thumb1))
-									{
-										@unlink($thumb1);
-									}
-								if(file_exists($thumb2))
-									{
-										@unlink($thumb2);
-									}
-								if(file_exists($thumb3))
-									{
-										@unlink($thumb3);
-									}
-							
-								//Image uploadin start.
-								$valid_exts = array('jpeg', 'jpg', 'png', 'gif');
-								$max_file_size = 2000 * 1024; #200kb
-								//$nw = $nh = 300; # image with # height
-								$imgwidth = 200;
-								$imgheight =  200;
-								
-								$imgwidth2 = 100;
-								$imgheight2 =  100;
-								
-								$imgwidth3 = 300;
-								$imgheight3 =  250;
-								
-								$imgwidth4 = 800;
-								$imgheight4 =  600;
-
-									$ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-									if (in_array($ext, $valid_exts)) {
-											//Upload image path...
-											$imagename = uniqid() . '.' . $ext; //Concate with Uniqid id and extension.
-											$path = '../profileimage/' . $imagename;
-											
-											$tmp = $_FILES['image']['tmp_name'];
-											$size = getimagesize($tmp);
-						
-											$x = (int) $_POST['x'];
-											$y = (int) $_POST['y'];
-											$w = (int) $_POST['w'] ? $_POST['w'] : $size[0];
-											$h = (int) $_POST['h'] ? $_POST['h'] : $size[1];
-						
-											$data = file_get_contents($tmp);
-											$vImg = imagecreatefromstring($data);
-											
-											//Crop code...
-											$dstImg = imagecreatetruecolor($imgwidth, $imgheight);
-											imagecopyresampled($dstImg, $vImg, 0, 0, $x, $y, $imgwidth, $imgheight, $w, $h);
-											imagejpeg($dstImg, $path);
-											
-											
-											
-											imagedestroy($dstImg);
-											
-											
-										} else {
-											echo 'unknown problem!';
-									} 
-
-					
-				}  else {
-					$imagename = $oldimg;	
-				}
-				*/
-			$InsertRegSql="INSERT INTO ".TABLE_PREFIX."user_registration SET                 
-																				FirstName = '".$fname."' ,
-																				LastName = '".$lname."' ,
-																				BusinessName = '".$businessName."',
-																				UserName = '".$username."',
-																				EmailId = '".$email."' ,
-																				RegistrationNo = '".$RegistrationNo."' ,  
-																				IpAddress ='" . $ip . "', 
-																				UserImage = '".$imagename."' ,  
-																				Address = '".$Address."' ,   
-																				Phone = '".$Phone."' , 
-																				Password = '".base64_encode($password)."',
-																				RegistDate = NOW() , 
-																				EmailVerification = '".$_REQUEST['EmailVerification']."' ,												
-																				UserStatus = '".$_REQUEST['UserStatus']."' 
-																				";
-																				
-				mysql_query($InsertRegSql) or mysql_error();
-					
-				require_once('../class.phpmailer.php');
-							
-										$adminMail = mysql_fetch_array(mysql_query("SELECT MailAddress FROM hr_admin_mail WHERE MailId = '1'"));
-										$noreply = $adminMail['MailAddress'];
-
-										
-										$mail = new PHPMailer(); // defaults to using php "mail()"
-										
-										//$body             = file_get_contents('contents.html');
-										
-										$mailbody = "<table align='center' style='width:700px; height:600px;'>
-										<tbody><tr>
-											<td>
-											  <table align='center' background='$siteimg/background.jpg' style='width:650px; text-align:center; height:500px;'>
-												<tbody><tr style='height:50px;'>
-												 
-												<td valign='middle' colspan='2'>
-												<img src='$siteimg/logo.png'></td>
-												
-												</tr>
-												
-												<tr>
-												 <td valign='top' align='center' colspan='2'>
-													<table style='height:308px; color:#FFF; width:380px;'>
-													 <tbody>
-													 <tr height='20%'>
-													  <td colspan='3' style='font-size:28px;'>
-													 Hello $fname
-													  </td>
-													  
-													 </tr>
-													 <tr height='20%'>
-													  <td colspan='3' style='font-size:28px;'>
-													 Registered Email : ".$email."<br/>
-													 Password : ".$password."
-													  </td>
-													  
-													 </tr>
-													 <tr height='20%'>
-													  
-													  <td colspan='3'>Welcome to Vicna. With one click, you can activate your account and using the site.</td>
-													 </tr>
-													 
-													  <tr>
-													  <td colspan='3' style='font-size: 14px;'>
-													  You <a href='#' style='color:#CCFA00; text-decoration:none;'>MUST</a> click this <a href='#' style='color:#CCFA00; text-decoration:none;cursor:pointer;'>ACTIVATION</a> link to enter the site
-													  </td>
-													  
-													 </tr>
-													 
-													 <tr>
-													 <td>&nbsp;</td>
-													  <td colspan='2'>
-													 <a href='$activationlink?email=".base64_encode($email)."&type=user'><button style='border-radius:10px;height:30px;cursor:pointer;   background-color: #A1D347;'>ACTIVATE ACCOUNT</button></a>
-													  </td>
-													  
-													 </tr>
-													 <tr>
-													  <td colspan='3' style='font-size:13px'><br></td>
-													  
-													 </tr>
-													</tbody></table>
-												</td>
-												
-												</tr>
-												 
-											 </tbody></table>
-										</td>
-									</tr>
-									
-									</tbody></table>";
-										
-										$mail->SetFrom($noreply, "Vicna");
-										
-										//$address = $email;
-										
-										$mail->AddAddress($email, "Vicna");
-										
-										$mail->Subject    = "Welcome to Vicna Account Activation!";
-										
-										$mail->AltBody    = "Account Activation Mail"; // Alt Body
-										
-										//$mail->MsgHTML($body);
-										
-										$mail->Body = $mailbody;
-										
-										//$mail->AddAttachment("images/logo5.png");      // attachment
-		
-										
-										if(!$mail->Send()) {
-										  echo "Mailer Error: " . $mail->ErrorInfo;
-										} else {
-										  /*echo "A test email sent to your email address '".$email."' Please Check Email and Spam too.";
-										  echo '<meta http-equiv="refresh" content="5;url=http://www.computersneaker.com">';*/
-										  echo '<script language="javascript">';
-										echo 'window.location="userlist.php?mess=successful"';
-										echo '</script>';
-										}
-						
-						
-						
-						
-						}
-
-						else
-						{
-						 $mess = "E-Mail/User Name already exists.Try another one! ";
-						}
-			}
-			
-			//Fetch User Details
-			$Uid = $_REQUEST['Uid'];
-			
-			$FetchUserSql = "SELECT * FROM ".TABLE_PREFIX."user_registration  WHERE Uid = '".$Uid."'"; 
-			$FetchUserQuery = mysql_query($FetchUserSql);
-			$NumRows =mysql_num_rows($FetchUserQuery);
-			$ArrFetchUser = mysql_fetch_array($FetchUserQuery);
-			
-			if($ArrFetchUser['UserImage'] == "")
-				{
-					$pic = "images/nopic.jpg";
-				}
-				else if(!is_file("../profileimage/bigimg/".$ArrFetchUser['UserImage']))
-				{
-					$pic = "images/nopic.jpg";
-				}
-				else
-				{
-					$pic = "../profileimage/bigimg/".$ArrFetchUser['UserImage'];
-				}	
-			
 ?>	
 <style>
 .r-btnAdd{
@@ -499,15 +271,15 @@ width:45%
                                                     <div id="email_div">
                                                  <button type="button" class="r-btnAdd">Add New</button>
         <div class="r-group">
-               <select name="client[0][pos_for_email]" id="client_0_pos_for_email" data-pattern-name="client[++][pos_for_email]" data-pattern-id="client_++_pos_for_email" onChange="check_contact_person(this.value);" style="width:50%"  >
+               <select name="email[0][pos]" id="email_0_pos" data-pattern-name="email[++][pos]" data-pattern-id="email_++_pos" onChange="check_contact_person(this.value);" style="width:50%"  >
     	<option value="Manager">Manager</option>
         <option value="Admin">Admin</option>
         <option value="Payroll">Payroll</option>
         <option value="Nurse In-Charge">Nurse In-Charge</option>
         <option value="Other">Other</option>
-    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
+    </select>
                 <div>
-		<input type="text" name="client[0][email]" id="client_0_email" data-pattern-name="client[++][email]" data-pattern-id="client_++_email" />
+		<input type="text" name="email[0][address]" id="email_0_address" data-pattern-name="email[++][address]" data-pattern-id="email_++_address" />
             </div>
 	    
                 <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
@@ -522,7 +294,7 @@ width:45%
                                                     <div id="fax_number_div">
                                                  <button type="button" class="r-btnAdd">Add New</button>
         <div class="r-group">
-               <select name="client[0][posfax]" id="client_0_posfax" data-pattern-name="client[++][posfax]" data-pattern-id="client_++_posfax"  onChange="check_contact_person(this.value);" style="width:50%"  >
+               <select name="fax[0][pos]" id="fax_0_pos" data-pattern-name="fax[++][pos]" data-pattern-id="fax_++_pos"  onChange="check_contact_person(this.value);" style="width:50%"  >
     	<option value="Manager">Manager</option>
         <option value="Admin">Admin</option>
         <option value="Payroll">Payroll</option>
@@ -530,7 +302,7 @@ width:45%
         <option value="Other">Other</option>
     </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
                 <div>
-		<input type="text" name="client[0][fax]" id="client_0_fax" data-pattern-name="client[++][fax]" data-pattern-id="client_++_fax" />
+		<input type="text" name="fax[0][address]" id="fax_0_address" data-pattern-name="fax[++][address]" data-pattern-id="fax_++_address" />
             </div>
 	   
                 <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
@@ -592,34 +364,12 @@ width:45%
 														</div>
                                                     </div>
                                                     
-                                                
-                                                    
-													 <div class="control-group" style="margin-bottom:0px;">
-													  <label class="control-label">Contact Person(s) <span style="color:#ff0000;">*</span> <a onclick="return contact_person();"> Add New</a></label>
-													   <div class="controls">
-												 <div id="contact_person_field_reapeater">
-    <div id="contact_person_p_1" class="contact_person_class">
-    <select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:50%" >
-    	<option value="Manager">Manager</option>
-        <option value="Admin">Admin</option>
-        <option value="Payroll">Payroll</option>
-        <option value="Nurse In-Charge">Nurse In-Charge</option>
-        <option value="Other">Other</option>
-    </select>
-        &nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="text" name="contact_person_name[]" placeholder="Enter Name" style="width:50%"   value="" /> <a onclick = "return delete_field(1);" style="cursor:pointer">Delete</a></div> 
-  </div>
-  <p id="contact_person_limit_msg" style="color:red"></p>		 
-														</div>
-                                                        <div style="clear:both"></div>
-													   </div>
-													     
-													 
-													 <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Phone Number  <span style="color:#ff0000;">*</span></label> 
-                                                 <div id="phone_number_div">
+                                                <div class="control-group" style="margin-bottom:0px;">
+                                                  <label class="control-label" >Contact Person(s)</label>
+                                                    <div id="cp_div">
                                                  <button type="button" class="r-btnAdd">Add New</button>
         <div class="r-group">
-               <select name="client[0][posphone]" id="client_0_posphone" data-pattern-name="client[++][posphone]" data-pattern-id="client_++_posphone"  onChange="check_contact_person(this.value);" style="width:50%"  >
+               <select name="cp[0][pos]" id="cp_0_pos" data-pattern-name="cp[++][pos]" data-pattern-id="cp_++_pos"   onChange="check_contact_person(this.value);" style="width:50%"  >
     	<option value="Manager">Manager</option>
         <option value="Admin">Admin</option>
         <option value="Payroll">Payroll</option>
@@ -627,7 +377,34 @@ width:45%
         <option value="Other">Other</option>
     </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
                 <div>
-		<input type="text" name="client[0][phone]" id="client_0_phone" data-pattern-name="client[++][phone]" data-pattern-id="client_++_phone" />
+		<input type="text" type="text" name="cp[0][address]" id="cp_0_address" data-pattern-name="cp[++][address]" data-pattern-id="cp_++_address" />
+            </div>
+	   
+                <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
+                <button type="button" class="r-btnRemove">Remove -</button>
+            
+        </div>
+        
+    </div>
+                                               </div>
+                                                    
+													 
+													     
+													 
+													 <div class="control-group" style="margin-bottom:0px;">
+                                                      <label class="control-label">Phone Number  <span style="color:#ff0000;">*</span></label> 
+                                                 <div id="phone_number_div">
+                                                 <button type="button" class="r-btnAdd">Add New</button>
+        <div class="r-group">
+               <select name="phone[0][pos]" id="phone_0_pos" data-pattern-name="phone[++][pos]" data-pattern-id="phone_++_pos"    onChange="check_contact_person(this.value);" style="width:50%"  >
+    	<option value="Manager">Manager</option>
+        <option value="Admin">Admin</option>
+        <option value="Payroll">Payroll</option>
+        <option value="Nurse In-Charge">Nurse In-Charge</option>
+        <option value="Other">Other</option>
+    </select> <!--<input type="text" name="vehicle[0][name]" id="vehicle_0_name" data-pattern-name="vehicle[++][name]" data-pattern-id="vehicle_++_name" />-->
+                <div>
+		<input type="text" type="text" name="phone[0][address]" id="phone_0_address" data-pattern-name="phone[++][address]" data-pattern-id="phone_++_address" />
             </div>
 	         <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
                 <button type="button" class="r-btnRemove">Remove -</button>
@@ -1022,30 +799,7 @@ $("#postal_address_chk").change(function() {
 	}
 </script>
 
- <script type="text/javascript" language="javascript">
-
-		var field_sr = 1;
-	function contact_person(){
-			field_sr++;
-			var numItems = $('.contact_person_class').length;
-			if(numItems <10){
-			//var field_html = '<p id="contact_person_p_'+field_sr+'"  class="contact_person_class"><input type="text"   name="organization_position[]"  placeholder="date"  style="width:30%"> <input type="email" name="contact_person_email[]" placeholder="Contact person email id" style="width:50%" /> <a onclick = "return delete_field('+field_sr+');"  style="cursor:pointer">Delete</a></p>';
-			
-			var field_html = '<div style="clear:both"></div><div id="contact_person_p_'+field_sr+'" class="contact_person_class" style="float:left"><select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:65%" ><option value="Manager">Manager</option><option value="Admin">Admin</option><option value="Payroll">Payroll</option><option value="Nurse In-Charge">Nurse In-Charge</option><option value="Other">Other</option></select>&nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="email" name="contact_person_email[]" placeholder="Enter Name" style="width:50%"   value="" /> <a onclick = "return delete_field('+field_sr+');" style="cursor:pointer">Delete</a></div>';
-			$("#contact_person_field_reapeater").append(field_html);
-			$("#contact_person_limit_msg").html("");
-			}else{
-				$("#contact_person_limit_msg").html("Max 9 Contact Number allowed.");
-			}
-		}
-		
-	function delete_field(pid){
-		$("#contact_person_p_"+pid).remove();
-		$("#contact_person_limit_msg").html("");
-	}
-	
-
-</script>
+ 
 <script type="text/javascript" src="js/jquery.form-repeater.js"></script>
 <script type="text/javascript">
  $(document).removeClass(function() {
@@ -1091,6 +845,21 @@ $("#postal_address_chk").change(function() {
       animationEasing: 'swing',
       clearValues: true
   });
+  $('#cp_div').repeater({
+      btnAddClass: 'r-btnAdd',
+      btnRemoveClass: 'r-btnRemove',
+      groupClass: 'r-group',
+      minItems: 1,
+      maxItems: 0,
+      startingIndex: 0,
+      reindexOnDelete: true,
+      repeatMode: 'append',
+      animation: null,
+      animationSpeed: 400,
+      animationEasing: 'swing',
+      clearValues: true
+  });
+  
   });
   </script>
 

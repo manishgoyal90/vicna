@@ -151,8 +151,8 @@ width:45%
                         <div>&nbsp;</div>
 					<!-- BEGIN FORM-->
 					Username and password is send to your Client's email address.<br>
-                    •	VICNA Client ID : <?php echo "VIC".range(00000,999999); ?><br>
-					•	Password  :  BFRYKBSFS@#1
+                    •	VICNA Client ID : <?php echo $_SESSION['username'];?><br>
+					•	Password  : <?php echo $_SESSION['temp_pwd'];?>
                 
 					<!-- END FORM-->           
 				 </div>
@@ -509,77 +509,7 @@ $("#postal_address_chk").change(function() {
 	}
 </script>
 
- <script type="text/javascript" language="javascript">
-
-		var field_sr = 1;
-	function contact_person(){
-			field_sr++;
-			var numItems = $('.contact_person_class').length;
-			if(numItems <10){
-			//var field_html = '<p id="contact_person_p_'+field_sr+'"  class="contact_person_class"><input type="text"   name="organization_position[]"  placeholder="date"  style="width:30%"> <input type="email" name="contact_person_email[]" placeholder="Contact person email id" style="width:50%" /> <a onclick = "return delete_field('+field_sr+');"  style="cursor:pointer">Delete</a></p>';
-			
-			var field_html = '<div style="clear:both"></div><div id="contact_person_p_'+field_sr+'" class="contact_person_class" style="float:left"><select name="contact_person[]"  onChange="check_contact_person(this.value);" style="width:65%" ><option value="Manager">Manager</option><option value="Admin">Admin</option><option value="Payroll">Payroll</option><option value="Nurse In-Charge">Nurse In-Charge</option><option value="Other">Other</option></select>&nbsp;&nbsp;<div id="other_contact_person1"></div> <input type="email" name="contact_person_email[]" placeholder="Enter Name" style="width:50%"   value="" /> <a onclick = "return delete_field('+field_sr+');" style="cursor:pointer">Delete</a></div>';
-			$("#contact_person_field_reapeater").append(field_html);
-			$("#contact_person_limit_msg").html("");
-			}else{
-				$("#contact_person_limit_msg").html("Max 9 Contact Number allowed.");
-			}
-		}
-		
-	function delete_field(pid){
-		$("#contact_person_p_"+pid).remove();
-		$("#contact_person_limit_msg").html("");
-	}
-	
-
-</script>
-<script type="text/javascript" src="js/jquery.form-repeater.js"></script>
-<script type="text/javascript">
- $(document).removeClass(function() {
-  $('#phone_number_div').repeater({
-      btnAddClass: 'r-btnAdd',
-      btnRemoveClass: 'r-btnRemove',
-      groupClass: 'r-group',
-      minItems: 1,
-      maxItems: 0,
-      startingIndex: 0,
-      reindexOnDelete: true,
-      repeatMode: 'append',
-      animation: null,
-      animationSpeed: 400,
-      animationEasing: 'swing',
-      clearValues: true
-  });
-   $('#fax_number_div').repeater({
-      btnAddClass: 'r-btnAdd',
-      btnRemoveClass: 'r-btnRemove',
-      groupClass: 'r-group',
-      minItems: 1,
-      maxItems: 0,
-      startingIndex: 0,
-      reindexOnDelete: true,
-      repeatMode: 'append',
-      animation: null,
-      animationSpeed: 400,
-      animationEasing: 'swing',
-      clearValues: true
-  });
-   $('#email_div').repeater({
-      btnAddClass: 'r-btnAdd',
-      btnRemoveClass: 'r-btnRemove',
-      groupClass: 'r-group',
-      minItems: 1,
-      maxItems: 0,
-      startingIndex: 0,
-      reindexOnDelete: true,
-      repeatMode: 'append',
-      animation: null,
-      animationSpeed: 400,
-      animationEasing: 'swing',
-      clearValues: true
-  });
-  });
-  </script>
+ 
 
 	<!-- END JAVASCRIPTS -->
 </body>
