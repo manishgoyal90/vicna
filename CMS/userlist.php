@@ -403,23 +403,20 @@ if($_REQUEST['submitdetail']  == 'Update')
 									$ctn = 1;
 									$GetUserSql = "SELECT * FROM ".TABLE_PREFIX."user_registration ORDER BY Uid DESC";
 									$GetQuery = mysql_query($GetUserSql) or die(mysql_error());
-									while($rowdest = mysql_fetch_array($GetQuery))
-									{
-										
-											
-												//Big Crop Img
-												if($rowdest['UserImage'] == "")
-												{
-													$proset = "images/nopic.jpg";
-												}
-												else if(!is_file("../profileImage/".$rowdest['UserImage']))
-												{
-													$proset = "images/nopic.jpg";
-												}
-												else
-												{
-													$proset = "../profileImage/".$rowdest['UserImage'];
-												} 	
+									while($rowdest = mysql_fetch_array($GetQuery)){
+										$phone = unserialize($rowdest['Phone']); 
+										foreach($phone as $phone_data){
+											$get_other = strpos($phone_data,"%%");
+											if($get_other === false){
+												$phone_pos_addr = $phone_data;
+											}else{
+												$phone_pos = explode("%%",$phone_data);
+												$phone_pos_addr = $phone_pos[1];
+											}
+											$phone_pos_and_addr = explode("@@",$phone_pos_addr);
+											$phone_final_data[] =  $phone_pos_and_addr[0]."[". $phone_pos_and_addr[1]."]";
+										}
+										$phone_final_data =  implode(',',$phone_final_data);
 									?>
 									<tr class="odd gradeX">
                                     	<td class="hidden-480">
@@ -430,7 +427,7 @@ if($_REQUEST['submitdetail']  == 'Update')
 										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['TradingName']?></div></td>
 										<td class="hidden-480"><div class="videoWrapper"><?=$rowdest['BusinessName']?></div></td>
                                    
-										<td class="hidden-480"><div class="videoWrapper"><?php $phone = unserialize($rowdest['Phone']); $phone_data =  implode(',',$phone); echo str_replace("@@","=>",$phone_data); ?></div></td>
+										<td class="hidden-480"><div class="videoWrapper"><?php echo $phone_final_data; ?></div></td>
 										<!-- <td class="hidden-480">
 											<div class="controls">
 											 <select class="span9 chosen" tabindex="1" id="stat<?=$rowdest['Uid']?>" onChange="changestatus(this.value,'<?=$rowdest['Uid']?>')">
