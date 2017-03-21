@@ -2,16 +2,20 @@
 				//Insert User Registration			  
 			if($_REQUEST['submit']=="Save")
 			{	                         
-				//print_r($_REQUEST); die("manish");
-				$fname = $_REQUEST['firstname'];     
-				$lname = $_REQUEST['lastname']; 
-				$businessName = $_REQUEST['business_name'];
-				$username = $_REQUEST['username'];
-				$email = mysql_real_escape_string(stripslashes($_REQUEST['email']));
+				//echo "<pre>";
+				//print_r($_REQUEST); 
+				$client_name = $_REQUEST['client_name'];     
+				$abn = $_REQUEST['abn']; 
+				$trading_as = $_REQUEST['trading_as'];
+				$website = $_REQUEST['website'];
+				$email = $_REQUEST['email'];
 				$password = mysql_real_escape_string(stripslashes($_REQUEST['password']));  
-				$Phone = $_REQUEST['Phone'];
-				$Address = addslashes($_REQUEST['Address']);
+				$street_address = $_REQUEST['street_address'];
+				$postal_address = $_REQUEST['postal_address'];
+				mysql_query("insert into hr_user_registration(client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person ) VALUES('".$client_name."','".$abn."','".$trading_as."','".$email."','".$website."','".$street_address."','".$postal_address."','".$fax."','".$contact_person."','".$contact_person."') ") or die(mysql_error());
+				header("location:email_verification.php"); die;
 				$oldimg = $_REQUEST['oldimg']; 
+				
 			//Registration No.
 				$ip = $_SERVER['REMOTE_ADDR'];
 				$date = date('d-m-Y g:i:s a');
@@ -436,9 +440,9 @@ width:45%
 							<div class="portlet-title">
 								<div class="caption"><i class="icon-reorder"></i><?=$pagetitle?></div>
 								<div class="tools">
-									<a href="javascript:;" class="collapse"></a>
+									<!--<a href="javascript:;" class="collapse"></a>
 									<a href="#portlet-config" data-toggle="modal" class="config"></a>
-									<a href="javascript:;" class="reload"></a>
+									<a href="javascript:;" class="reload"></a>-->
 									<a href="javascript:;" class="remove"></a>
 								</div>
 							</div>
@@ -469,7 +473,7 @@ width:45%
                                                </div>
 											   
 											    <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Trading as <span style="color:#ff0000;">*</span></label>
+                                              <label class="control-label">Trading as</label>
                                                <div class="controls">
                                                   <input type="text" class="span m-wrap"  name="trading_as" id="trading_as" value="" />
                                                 </div>
@@ -485,7 +489,7 @@ width:45%
 													   </div>
                                                        
                                                        <div class="control-group" style="margin-bottom:0px;">
-													  <label class="control-label">Upload photo / Logo</label>
+													  <label class="control-label">Upload Photo / Logo</label>
 													   <div class="controls">
 														  <input type="file" class="span m-wrap" name="client_file"  id="client_file" />
 														</div>
@@ -582,7 +586,7 @@ width:45%
 													   </div>
                                                       
 													<div class="control-group" style="margin-bottom:0px;">											  
-                                                          <label class="control-label">postal Address  <span style="color:#ff0000;">*</span></label> 
+                                                          <label class="control-label">Postal Address  <span style="color:#ff0000;">*</span> <input type="checkbox" name="postal_address_chk" id="postal_address_chk" value=""/> Same as Street Address</label> 
                                                         <div class="controls">
 														  <textarea class="span m-wrap" name="postal_address"  id="postal_address" rows="4" ></textarea>
 														</div>
@@ -591,7 +595,7 @@ width:45%
                                                 
                                                     
 													 <div class="control-group" style="margin-bottom:0px;">
-													  <label class="control-label">Contact person(s) <span style="color:#ff0000;">*</span> <a onclick="return contact_person();"> Add New</a></label>
+													  <label class="control-label">Contact Person(s) <span style="color:#ff0000;">*</span> <a onclick="return contact_person();"> Add New</a></label>
 													   <div class="controls">
 												 <div id="contact_person_field_reapeater">
     <div id="contact_person_p_1" class="contact_person_class">
@@ -702,15 +706,24 @@ width:45%
      <script>
 $('select').change(function(){
 var value=$(this).val();
-
+var select_name  = this.id;
 if(value=="Other"){
 $(this).addClass("abc")
-$(this).after( "<input type='text' name='' class='new-input'>" );
+$(this).after( "<input type='text' name='"+select_name+"_other' class='new-input'>" );
 }
 else{
 $(this).next('input').remove();
 }
-})
+});
+
+$("#postal_address_chk").change(function() {
+    if(this.checked) {
+       var street_add = $("#street_address").val();
+	   $("#postal_address").val(street_add);
+    }else{
+		$("#postal_address").val("");
+	}
+});
 </script>
 	<script type="text/javascript" language="javascript1.2">
     function check()
