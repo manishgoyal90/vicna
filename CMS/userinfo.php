@@ -528,24 +528,17 @@ $(".dt_pic").datepicker({
                         &nbsp;</h3>
                       <table  width="450px" cellpadding="3" rules="none" border="0">
                         <tr>
-                          <td colspan="3"><h1>
-                              <?=stripslashes(ucfirst($rowdest7['FirstName']))?>
-                              &nbsp;
-                              <?=stripslashes(ucfirst($rowdest7['LastName']))?>
-                            </h1></td>
-                        </tr>
-                        <tr>
-                          <td><p><i class="icon-key"></i>&nbsp;Registration Number</p></td>
+                          <td><p><i class="icon-key"></i>&nbsp;Company/Trust/Client Name</p></td>
                           <td><p>:</p></td>
                           <td><p>
-                              <?=stripslashes($rowdest7['RegistrationNo'])?>
+                              <?=$rowdest7['client_name']?>
                             </p></td>
                         </tr>
                         <tr>
-                          <td width="150px"><p><i class="icon-envelope"></i>&nbsp;Email Address</p></td>
+                          <td width="150px"><p><i class="icon-envelope"></i>&nbsp;Trading as</p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=stripslashes($rowdest7['EmailId'])?>
+                              <?=$rowdest7['TradingName']?>
                             </p></td>
                         </tr>
                         <?php
@@ -561,10 +554,10 @@ $(".dt_pic").datepicker({
 														$secretpwd=$t1.$replace.$t2;*/
 													?>
                         <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Password </p></td>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;ABN </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=base64_decode($rowdest7['Password'])?>
+                              <?=$rowdest7['BusinessName']?>
                             </p></td>
                         </tr>
                         <!--<tr>
@@ -587,61 +580,47 @@ $(".dt_pic").datepicker({
                           <td width="220px;"><p>
                               <?=$rowdest7['State']?>
                             </p></td>
-                        </tr>
+                        </tr>-->
                         <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;City </p></td>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Contact person(s)</p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=$rowdest7['City']?>
+                              <?=$rowdest7['contact_person']?>
                             </p></td>
                         </tr>
--->                        <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Address </p></td>
+                        <tr>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Street Address</p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
                               <?=$rowdest7['Address']?>
                             </p></td>
                         </tr>
                         <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Phone </p></td>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Postal Address </p></td>
+                          <td><p>:</p></td>
+                          <td width="220px;"><p>
+                              <?=$rowdest7['BusinessAddress']?>
+                            </p></td>
+                        </tr>
+                        <tr>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Phone Number(s)</p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
                               <?=$rowdest7['Phone']?>
                             </p></td>
                         </tr>
                         <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Fax </p></td>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Fax Number(s) </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
                               <?=$rowdest7['Fax']?>
                             </p></td>
                         </tr>
                         <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;ZipCode </p></td>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Email(s) </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=$rowdest7['ZipCode']?>
-                            </p></td>
-                        </tr>
-                        <!--<tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;BusinessName </p></td>
-                          <td><p>:</p></td>
-                          <td width="220px;"><p>
-                              <?=$rowdest7['BusinessName']?>
-                            </p></td>
-                        </tr>-->
-                        <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;TradingName </p></td>
-                          <td><p>:</p></td>
-                          <td width="220px;"><p>
-                              <?=$rowdest7['TradingName']?>
-                            </p></td>
-                        </tr>
-                        <tr>
-                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;BusinessAddress </p></td>
-                          <td><p>:</p></td>
-                          <td width="220px;"><p>
-                              <?=$rowdest7['BusinessAddress']?>
+                              <?=$rowdest7['EmailId']?>
                             </p></td>
                         </tr>
                         <tr>
@@ -651,6 +630,21 @@ $(".dt_pic").datepicker({
                               <?=$rowdest7['Website']?>
                             </p></td>
                         </tr>
+                        <tr>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;VICNA Client ID </p></td>
+                          <td><p>:</p></td>
+                          <td width="220px;"><p>
+                              <?=$rowdest7['UserName']?>
+                            </p></td>
+                        </tr>
+                        <tr>
+                          <td width="150px"><p><i class="icon-lock"></i>&nbsp;Password </p></td>
+                          <td><p>:</p></td>
+                          <td width="220px;"><p>
+                              <?=$rowdest7['Password']?>
+                            </p></td>
+                        </tr>
+                        
                       </table>
                     </div>
                     <!--end span8--> 
@@ -663,14 +657,21 @@ $(".dt_pic").datepicker({
                         <input type="hidden" name="Uid" value="<?=$_REQUEST['Uid']?>">
                         <table  width="450px" cellpadding="3" rules="none" border="0">
                           <tr>
-                            <td width="150px"><p><i class="icon-user"></i>&nbsp;First Name</p></td>
+                            <td width="150px"><p><i class="icon-user"></i>&nbsp;Company/Trust/Client Name</p></td>
                             <td><p>:</p></td>
                             <td width="220px;"><p>
-                                <input type="text" name="FirstName" value="<?=stripslashes($rowdest7['FirstName'])?>">
+                                <input type="text" name="client_name" value="<?=stripslashes($rowdest7['client_name'])?>">
                               </p></td>
                           </tr>
                           <tr>
-                            <td width="150px"><p><i class="icon-user"></i>&nbsp;Last Name</p></td>
+                            <td width="150px"><p><i class="icon-user"></i>&nbsp;Trading as</p></td>
+                            <td><p>:</p></td>
+                            <td width="220px;"><p>
+                                <input type="text" name="LastName" value="<?=stripslashes($rowdest7['LastName'])?>">
+                              </p></td>
+                          </tr>
+                           <tr>
+                            <td width="150px"><p><i class="icon-user"></i>&nbsp;ABN</p></td>
                             <td><p>:</p></td>
                             <td width="220px;"><p>
                                 <input type="text" name="LastName" value="<?=stripslashes($rowdest7['LastName'])?>">
