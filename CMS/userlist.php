@@ -404,8 +404,8 @@ if($_REQUEST['submitdetail']  == 'Update')
 									$GetUserSql = "SELECT * FROM ".TABLE_PREFIX."user_registration ORDER BY Uid DESC";
 									$GetQuery = mysql_query($GetUserSql) or die(mysql_error());
 									while($rowdest = mysql_fetch_array($GetQuery)){
-										echo "<pre>";
-										print_r($rowdest);
+										//echo "<pre>";
+										//print_r($rowdest);
 										$phone = unserialize($rowdest['Phone']); 
 										foreach($phone as $phone_data){
 											$get_other = strpos($phone_data,"%%");
