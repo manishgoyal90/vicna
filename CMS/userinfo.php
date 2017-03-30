@@ -1,5 +1,23 @@
 <?php include"lib/header.php";?>
 <?php
+function get_filter_value($vicna_col){
+		$vicna_col = unserialize($vicna_col); 
+		foreach($vicna_col as $vicna_col_data){
+			$get_other = strpos($vicna_col_data,"%%");
+		if($get_other === false){
+			$vicna_col_pos_addr = $vicna_col_data;
+		}else{
+			$vicna_col_pos = explode("%%",$vicna_col_data);
+			$vicna_col_pos_addr = $vicna_col_pos[1];
+		}
+			$vicna_col_pos_and_addr = explode("@@",$vicna_col_pos_addr);
+			$vicna_col_final_data[] =  $vicna_col_pos_and_addr[0]."[". $vicna_col_pos_and_addr[1]."]";
+		}
+			$vicna_col_final_datas =  implode(', ',$vicna_col_final_data);
+			return $vicna_col_final_datas;
+
+}
+
 if(isset($_REQUEST['Update'])) {	                         
 	$uid = $_REQUEST['Uid'];
 	$businessName = $_REQUEST['businessName'];
@@ -286,11 +304,6 @@ if(isset($_REQUEST['addInvoice']))
 		$getdestsql = "SELECT * FROM ".TABLE_PREFIX."user_registration WHERE Uid  = '".$_REQUEST['Uid']."'";
 		$getdestquery = mysql_query($getdestsql) or die(mysql_error());
 		$rowdest7 = mysql_fetch_array($getdestquery);
-	
-		
-			
-											
-					
 					if($rowdest7['UserImage'] == "")
 					{
 						$proset = "../profileImage/profile_pic.jpg";
@@ -310,12 +323,12 @@ if(isset($_REQUEST['addInvoice']))
 
 
 <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>--> 
 <script>
 $(document).ready(function(){
     $('#myTable').dataTable();
 });
-</script>
+</script> 
 <script type="text/javascript">
 			// Show Designation info  from department
 		   function desigCheck(desig) 
@@ -410,8 +423,8 @@ $(document).ready(function(){
 	}
 </script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> 
 <script>
 $(".dt_pic").datepicker({
       dateFormat: 'dd-mm-yy'
@@ -566,8 +579,8 @@ $(".dt_pic").datepicker({
                           <td><p>
                               <?php if($rowdest7['Gender']!='') { echo $rowdest7['Gender'] ; } else { echo "N/A"; } ?>
                             </p></td>
-                        </tr>-->
-<!--                        <tr>
+                        </tr>--> 
+                        <!--                        <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Country </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
@@ -585,7 +598,7 @@ $(".dt_pic").datepicker({
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Contact person(s)</p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=$rowdest7['contact_person']?>
+                              <?=get_filter_value($rowdest7['contact_person'])?>
                             </p></td>
                         </tr>
                         <tr>
@@ -606,21 +619,21 @@ $(".dt_pic").datepicker({
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Phone Number(s)</p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=$rowdest7['Phone']?>
+                              <?php echo get_filter_value($rowdest7['Phone']);?>
                             </p></td>
                         </tr>
                         <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Fax Number(s) </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=$rowdest7['Fax']?>
+                              <?=get_filter_value($rowdest7['Fax'])?>
                             </p></td>
                         </tr>
                         <tr>
                           <td width="150px"><p><i class="icon-lock"></i>&nbsp;Email(s) </p></td>
                           <td><p>:</p></td>
                           <td width="220px;"><p>
-                              <?=$rowdest7['EmailId']?>
+                              <?=get_filter_value($rowdest7['EmailId'])?>
                             </p></td>
                         </tr>
                         <tr>
@@ -644,7 +657,6 @@ $(".dt_pic").datepicker({
                               <?=$rowdest7['Password']?>
                             </p></td>
                         </tr>
-                        
                       </table>
                     </div>
                     <!--end span8--> 
@@ -670,7 +682,7 @@ $(".dt_pic").datepicker({
                                 <input type="text" name="LastName" value="<?=stripslashes($rowdest7['LastName'])?>">
                               </p></td>
                           </tr>
-                           <tr>
+                          <tr>
                             <td width="150px"><p><i class="icon-user"></i>&nbsp;ABN</p></td>
                             <td><p>:</p></td>
                             <td width="220px;"><p>
@@ -806,347 +818,303 @@ $(".dt_pic").datepicker({
               <div class="tab-pane profile-classic <?php if(isset($_REQUEST['update'])){echo 'active';}else{echo '';}?> row-fluid" id="tab_1_2">
                 <div class="row-fluid">
                   <div class="span profile-info">
-                    <h3>Bookings&nbsp;
-                      <!--<button id="edit_btn" onClick="edit_booking();" class="btn mini blue">Edit <i class="icon-edit"></i></button>-->
+                    <h3>Bookings&nbsp; 
+                      <!--<button id="edit_btn" onClick="edit_booking();" class="btn mini blue">Edit <i class="icon-edit"></i></button>--> 
                       &nbsp;</h3>
-                   
-
-
-
-
-
-
-                      <div class="tabbable tabbable-custom tabbable-full-width">
-                          <ul class="nav nav-tabs">
-                              <li class="active"><a href="#tab_2_1" data-toggle="tab">Make a New Booking</a></li>
-                              <li><a href="#tab_2_2" data-toggle="tab">Manage Bookings</a></li>
-                              <li><a href="#tab_2_3" data-toggle="tab">Completed Shifts</a></li>
-                              <li><a href="#tab_2_4" data-toggle="tab">Feedbacks</a></li>
-                              <li><a href="#tab_2_5" data-toggle="tab">Preferences</a></li>
-                              <!-- <li><a href="#tab_1_7" data-toggle="tab">My Settings</a></li>
-                               <li><a href="#tab_1_6" data-toggle="tab">Member Privilege</a></li>-->
-                              <!--<li><a href="#tab_1_4" data-toggle="tab">Course Reviews</a></li>-->
-                          </ul>
-                          <div class="tab-content">
-                              <div class="tab-pane row-fluid active" id="tab_2_1">
-                                  <div class="row-fluid">
-                                      <div class="span6">
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Company/Trust/Client Name</label>
-                                              <div class="controls">
-                                                  <input type="text" class="span m-wrap" name="client_name" id="client_name" value="" readonly>
-                                              </div>
-                                          </div>
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Trading as</label>
-                                              <div class="controls">
-                                                  <input type="text" class="span m-wrap" name="trading_as" id="trading_as" value="" readonly>
-                                              </div>
-                                          </div>
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Street Address</label>
-                                              <div class="controls">
-                                                  <textarea class="span m-wrap" name="street_address" id="street_address" rows="4" readonly></textarea>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <div class="span6">
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Phone No.</label>
-                                              <div class="controls">
-                                                  <input type="text" class="span m-wrap" name="trading_as" id="phone-no" value="" readonly>
-                                              </div>
-                                          </div>
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Fax Number</label>
-                                              <div class="controls">
-                                                  <input type="text" class="span m-wrap" name="trading_as" id="fax_no" value="" readonly>
-                                              </div>
-                                          </div>
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Email</label>
-                                              <div class="controls">
-                                                  <input type="email" class="span m-wrap" name="trading_as" id="email" value="" readonly>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <div class="span12" style="margin-left:0">
-                                          <div class="control-group" style="margin-bottom:0px;">
-                                              <label class="control-label">Shift Requested By</label>
-                                              <div class="controls">
-                                                  <input type="text" class="span m-wrap" name="trading_as" id="shift_requested" value="" readonly>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <div class="span12 " style="margin-left:0">
-
-                                          <h2>Shift Details</h2>
-                                          <div class="row-fluid">
-                                              <div class="span6">
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Address</label>
-                                                      <div class="controls">
-                                                          <textarea class="span m-wrap" name="street_address" id="Address" rows="4"></textarea>
-                                                      </div>
-                                                  </div>
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Area/Ward</label>
-                                                      <div class="controls">
-                                                          <input type="text" class="span m-wrap" name="trading_as" id="area_ward" value="">
-                                                      </div>
-                                                  </div>
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Qualification</label>
-                                                      <div class="controls">
-                                                          <input type="email" class="span m-wrap" name="trading_as" id="Qualification" value="">
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                              <div class="span6">
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Date</label>
-                                                      <div class="controls">
-                                                          <input type="text" class="span m-wrap" name="trading_as" id="Date" value="">
-                                                      </div>
-                                                  </div>
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Time</label>
-                                                      <div class="controls">
-                                                          <input type="text" class="span m-wrap" name="trading_as" id="Time" value="">
-                                                      </div>
-                                                  </div>
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Speciality(if any)</label>
-                                                      <div class="controls">
-                                                          <input type="email" class="span m-wrap" name="trading_as" id="Speciality" value="">
-                                                      </div>
-                                                  </div>
-                                                  <div class="control-group" style="margin-bottom:0px;">
-                                                      <label class="control-label">Staff Requested</label>
-                                                      <div class="controls">
-                                                          <input type="email" class="span m-wrap" name="trading_as" id="staff_req" value="">
-                                                      </div>
-                                                  </div>
-                                              </div>
-                                          </div>
-    
-                                          <div class="span12" style="margin-left:0">
-                                              <div class="control-group" style="margin-bottom:0px;">
-                                                  <label class="control-label">Comments</label>
-                                                  <div class="controls">
-                                                      <textarea class="span m-wrap" name="street_address" id="Comments" rows="4"></textarea>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="modal-footer" style="text-align:left;float: left;width: 100%;">
-                                              <input type="submit" class="btn blue" name="submit" value="Update">
-                                          </div>
-                                      </div>
-
-                            
-                                  </div>                              
+                    <div class="tabbable tabbable-custom tabbable-full-width">
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_2_1" data-toggle="tab">Make a New Booking</a></li>
+                        <li><a href="#tab_2_2" data-toggle="tab">Manage Bookings</a></li>
+                        <li><a href="#tab_2_3" data-toggle="tab">Completed Shifts</a></li>
+                        <li><a href="#tab_2_4" data-toggle="tab">Feedbacks</a></li>
+                        <li><a href="#tab_2_5" data-toggle="tab">Preferences</a></li>
+                        <!-- <li><a href="#tab_1_7" data-toggle="tab">My Settings</a></li>
+                               <li><a href="#tab_1_6" data-toggle="tab">Member Privilege</a></li>--> 
+                        <!--<li><a href="#tab_1_4" data-toggle="tab">Course Reviews</a></li>-->
+                      </ul>
+                      <div class="tab-content">
+                        <div class="tab-pane row-fluid active" id="tab_2_1">
+                          <div class="row-fluid">
+                            <div class="span6">
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Company/Trust/Client Name</label>
+                                <div class="controls">
+                                  <input type="text" class="span m-wrap" name="client_name" id="client_name" value="<?=$rowdest7['client_name']?>" readonly>
+                                </div>
                               </div>
-
-                              <!--end tab-pane-->
-                              <div class="tab-pane profile-classic row-fluid" id="tab_2_2">
-                                  <div class="row-fluid">
-                                      <div class="span profile-info">
-                                          <h3>
-                                             Manage Bookings
-                                          </h3>
-                                          <div class="col-md-12" id="">
-                                              <div id="tablesec">
-                                                  <table class="table table-striped table-bordered table-hover" id="sample_22">
-                                                      <thead>
-                                                          <tr>
-                                                              <th class="hidden-480">Address</th>
-                                                              <th class="hidden-480">Area/Ward</th>
-                                                              <th class="hidden-480">Date</th>
-                                                              <th class="hidden-480">Time</th>
-                                                              <th class="hidden-480">Qualification</th>
-                                                              <th class="hidden-480">Speciality</th>
-                                                              <th class="hidden-480">Vicna Staff Requested</th>
-                                                              <th class="hidden-480">Comments</th>
-                                                              <th class="hidden-480">Vicna Staff Booked</th>
-                                                          </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                          <tr class="odd gradeX">
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                          </tr>
-                                             
-                                                      </tbody>
-                                                  </table>
-                                              </div>
-                                          </div>
-                                      </div>
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Trading as</label>
+                                <div class="controls">
+                                  <input type="text" class="span m-wrap" name="trading_as" id="trading_as" value="<?=$rowdest7['TradingName']?>" readonly>
+                                </div>
+                              </div>
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Street Address</label>
+                                <div class="controls">
+                                  <textarea class="span m-wrap" name="street_address" id="street_address" rows="4" readonly><?=$rowdest7['Address']?></textarea>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="span6">
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Phone No.</label>
+                                <div class="controls">
+                                  <input type="text" class="span m-wrap" name="trading_as" id="phone-no" value="<?php echo get_filter_value($rowdest7['Phone']);?>" readonly>
+                                </div>
+                              </div>
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Fax Number</label>
+                                <div class="controls">
+                                  <input type="text" class="span m-wrap" name="trading_as" id="fax_no" value="<?=get_filter_value($rowdest7['Fax'])?>" readonly>
+                                </div>
+                              </div>
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Email</label>
+                                <div class="controls">
+                                  <input type="email" class="span m-wrap" name="trading_as" id="email" value="<?=get_filter_value($rowdest7['EmailId'])?>" readonly>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="span12" style="margin-left:0">
+                              <div class="control-group" style="margin-bottom:0px;">
+                                <label class="control-label">Shift Requested By</label>
+                                <div class="controls">
+                                  <input type="text" class="span m-wrap" name="trading_as" id="shift_requested" value="" readonly>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="span12 " style="margin-left:0">
+                              <h2>Shift Details</h2>
+                              <div class="row-fluid">
+                                <div class="span6">
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Address</label>
+                                    <div class="controls">
+                                      <textarea class="span m-wrap" name="street_address" id="Address" rows="4"></textarea>
+                                    </div>
                                   </div>
-                              </div>
-
-                              <!--tab_1_2-->
-                              <!--tab_1_3-->
-
-                              <div class="tab-pane profile-classic row-fluid" id="tab_2_3">
-                                  <div class="row-fluid">
-                                      <div class="span profile-info">
-                                          <h3>
-                                              Completed Shifts
-                                          </h3>
-                                          <div class="col-md-12" id="">
-                                              <div id="tablesec">
-                                                  <table class="table table-striped table-bordered table-hover" id="sample_23">
-                                                      <thead>
-                                                          <tr>
-                                                              <th class="hidden-480">Address</th>
-                                                              <th class="hidden-480">Area/Ward</th>
-                                                              <th class="hidden-480">Date</th>
-                                                              <th class="hidden-480">Time</th>
-                                                              <th class="hidden-480">Qualification</th>
-                                                              <th class="hidden-480">Speciality</th>
-                                                              <th class="hidden-480">Vicna Staff Booked</th>
-                                                              <th class="hidden-480">Action</th>
-                                                          </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                          <tr class="odd gradeX">
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">
-                                                                  <a href="#">Add To Favourite</a><br />
-                                                                  <a href="#">Add To Do Not Send List</a><br />
-                                                                  <a href="#">Provide Feedback</a>
-                                                              </td>
-                                                          </tr>
-
-                                                      </tbody>
-                                                  </table>
-                                              </div>
-                                          </div>
-                                      </div>
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Area/Ward</label>
+                                    <div class="controls">
+                                      <input type="text" class="span m-wrap" name="trading_as" id="area_ward" value="">
+                                    </div>
                                   </div>
-                              </div>
-
-                              <div class="tab-pane profile-classic row-fluid" id="tab_2_4">
-                                  <div class="row-fluid">
-                                      <div class="span profile-info">
-                                          <h3>
-                                            Feedbacks
-                                          </h3>
-                                          <div class="col-md-12" id="">
-                                              <div id="tablesec">
-                                                  <table class="table table-striped table-bordered table-hover" id="sample_24">
-                                                      <thead>
-                                                          <tr>
-                                                              <th class="hidden-480">Client's Representative</th>
-                                                              <th class="hidden-480">Position</th>
-                                                              <th class="hidden-480">Feedbcak</th>
-                                                              <th class="hidden-480">Vicna Staff (if any)</th>
-                                                          </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                          <tr class="odd gradeX">
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                              <td class="hidden-480">abf</td>
-                                                          </tr>
-
-                                                      </tbody>
-                                                  </table>
-                                              </div>
-                                          </div>
-                                      </div>
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Qualification</label>
+                                    <div class="controls">
+                                      <input type="email" class="span m-wrap" name="trading_as" id="Qualification" value="">
+                                    </div>
                                   </div>
-                              </div>
-
-                              <div class="tab-pane profile-classic row-fluid" id="tab_2_5">
-                                  <div class="row-fluid">
-                                      <div class="span profile-info">
-                                          <h3>
-                                              Preferences
-                                          </h3>
-                                          <div class="col-md-12" id="">
-                                              <div id="tablesec">
-                                                  <table class="table table-striped table-bordered table-hover" id="sample_26">
-                                                      <thead>
-                                                          <tr>
-                                                              <th class="hidden-480" style="text-align:center">Favorites List</th>
-                                                              <th class="hidden-480" style="text-align:center">Do Not Send List</th>
-                                                          </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                          <tr class="odd gradeX">
-                                                              <td class="hidden-480">
-                                                                  <table class="pref-table">
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <td>asc</td>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>sdd</td>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td><a href="#">Add More</a></td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </td>
-                                                              <td class="hidden-480">
-                                                                  <table class="pref-table">
-                                                                      <tbody>
-                                                                          <tr>
-                                                                              <td>asc</td>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td>sdd</td>
-                                                                          </tr>
-                                                                          <tr>
-                                                                              <td><a href="#">Add More</a></td>
-                                                                          </tr>
-                                                                      </tbody>
-                                                                  </table>
-                                                              </td>
-                                                          </tr>
-
-                                                      </tbody>
-                                                  </table>
-                                              </div>
-                                          </div>
-                                      </div>
+                                </div>
+                                <div class="span6">
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Date</label>
+                                    <div class="controls">
+                                      <input type="text" class="span m-wrap" name="trading_as" id="Date" value="">
+                                    </div>
                                   </div>
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Time</label>
+                                    <div class="controls">
+                                      <input type="text" class="span m-wrap" name="trading_as" id="Time" value="">
+                                    </div>
+                                  </div>
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Speciality(if any)</label>
+                                    <div class="controls">
+                                      <input type="email" class="span m-wrap" name="trading_as" id="Speciality" value="">
+                                    </div>
+                                  </div>
+                                  <div class="control-group" style="margin-bottom:0px;">
+                                    <label class="control-label">Staff Requested</label>
+                                    <div class="controls">
+                                      <input type="email" class="span m-wrap" name="trading_as" id="staff_req" value="">
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-
-                              <!--tab_1_3-->
-
+                              <div class="span12" style="margin-left:0">
+                                <div class="control-group" style="margin-bottom:0px;">
+                                  <label class="control-label">Comments</label>
+                                  <div class="controls">
+                                    <textarea class="span m-wrap" name="street_address" id="Comments" rows="4"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer" style="text-align:left;float: left;width: 100%;">
+                                <input type="submit" class="btn blue" name="submit" value="Submit">
+                              </div>
+                            </div>
                           </div>
-                          <!--end tab-pane-->
+                        </div>
+                        
+                        <!--end tab-pane-->
+                        <div class="tab-pane profile-classic row-fluid" id="tab_2_2">
+                          <div class="row-fluid">
+                            <div class="span profile-info">
+                              <h3> Manage Bookings </h3>
+                              <div class="col-md-12" id="">
+                                <div id="tablesec">
+                                  <table class="table table-striped table-bordered table-hover" id="sample_22">
+                                    <thead>
+                                      <tr>
+                                        <th class="hidden-480">Address</th>
+                                        <th class="hidden-480">Area/Ward</th>
+                                        <th class="hidden-480">Date</th>
+                                        <th class="hidden-480">Time</th>
+                                        <th class="hidden-480">Qualification</th>
+                                        <th class="hidden-480">Speciality</th>
+                                        <th class="hidden-480">Vicna Staff Requested</th>
+                                        <th class="hidden-480">Comments</th>
+                                        <th class="hidden-480">Vicna Staff Booked</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr class="odd gradeX">
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!--tab_1_2--> 
+                        <!--tab_1_3-->
+                        
+                        <div class="tab-pane profile-classic row-fluid" id="tab_2_3">
+                          <div class="row-fluid">
+                            <div class="span profile-info">
+                              <h3> Completed Shifts </h3>
+                              <div class="col-md-12" id="">
+                                <div id="tablesec">
+                                  <table class="table table-striped table-bordered table-hover" id="sample_23">
+                                    <thead>
+                                      <tr>
+                                        <th class="hidden-480">Address</th>
+                                        <th class="hidden-480">Area/Ward</th>
+                                        <th class="hidden-480">Date</th>
+                                        <th class="hidden-480">Time</th>
+                                        <th class="hidden-480">Qualification</th>
+                                        <th class="hidden-480">Speciality</th>
+                                        <th class="hidden-480">Vicna Staff Booked</th>
+                                        <th class="hidden-480">Action</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr class="odd gradeX">
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480"><a href="#">Add To Favourite</a><br />
+                                          <a href="#">Add To Do Not Send List</a><br />
+                                          <a href="#">Provide Feedback</a></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane profile-classic row-fluid" id="tab_2_4">
+                          <div class="row-fluid">
+                            <div class="span profile-info">
+                              <h3> Feedbacks </h3>
+                              <div class="col-md-12" id="">
+                                <div id="tablesec">
+                                  <table class="table table-striped table-bordered table-hover" id="sample_24">
+                                    <thead>
+                                      <tr>
+                                        <th class="hidden-480">Client's Representative</th>
+                                        <th class="hidden-480">Position</th>
+                                        <th class="hidden-480">Feedbcak</th>
+                                        <th class="hidden-480">Vicna Staff (if any)</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr class="odd gradeX">
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480">abf</td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane profile-classic row-fluid" id="tab_2_5">
+                          <div class="row-fluid">
+                            <div class="span profile-info">
+                              <h3> Preferences </h3>
+                              <div class="col-md-12" id="">
+                                <div id="tablesec">
+                                  <table class="table table-striped table-bordered table-hover" id="sample_26">
+                                    <thead>
+                                      <tr>
+                                        <th class="hidden-480" style="text-align:center">Favorites List</th>
+                                        <th class="hidden-480" style="text-align:center">Do Not Send List</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr class="odd gradeX">
+                                        <td class="hidden-480"><table class="pref-table">
+                                            <tbody>
+                                              <tr>
+                                                <td>asc</td>
+                                              </tr>
+                                              <tr>
+                                                <td>sdd</td>
+                                              </tr>
+                                              <tr>
+                                                <td><a href="#">Add More</a></td>
+                                              </tr>
+                                            </tbody>
+                                          </table></td>
+                                        <td class="hidden-480"><table class="pref-table">
+                                            <tbody>
+                                              <tr>
+                                                <td>asc</td>
+                                              </tr>
+                                              <tr>
+                                                <td>sdd</td>
+                                              </tr>
+                                              <tr>
+                                                <td><a href="#">Add More</a></td>
+                                              </tr>
+                                            </tbody>
+                                          </table></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!--tab_1_3--> 
+                        
                       </div>
-
-
-
-
-
-
-
-
-
-
-
+                      <!--end tab-pane--> 
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1190,11 +1158,10 @@ $(".dt_pic").datepicker({
 									?>
                             <tr class="odd gradeX">
                               <td class="hidden-480"><?=$ctn;?></td>
-                              
                               <td class="hidden-480"><div class="videoWrapper">
                                   <?=$rowdest['invoiceNo']?>
                                 </div></td>
-                                 <td class="hidden-480"><div class="videoWrapper">
+                              <td class="hidden-480"><div class="videoWrapper">
                                   <?=$rowdest['invoiceDate']?>
                                 </div></td>
                               <td class="hidden-480"><div class="videoWrapper">
@@ -1203,15 +1170,13 @@ $(".dt_pic").datepicker({
                               <td class="hidden-480"><div class="videoWrapper">
                                   <?=$rowdest['dueDate']?>
                                 </div></td>
-                              
                               <td class="hidden-480"><div class="controls">
                                   <select class="span9 chosen" tabindex="1" id="stat<?=$rowdest['id']?>" onChange="changestatus(this.value,'<?=$rowdest['id']?>')">
                                     <option value="true" <?=$rowdest['status'] == 'Yes' ? 'selected' : ''?>>Paid</option>
                                     <option value="false" <?=$rowdest['status'] == 'No' ? 'selected' : ''?>>Payment Due</option>
                                   </select>
                                 </div></td>
-                             <td class="hidden-480"><div class="controls">
-                               <a onclick="deleteone(<?=$rowdest['id']?>, <?=$_REQUEST['Uid']?>)" href="#" class="btn mini red"><i class="icon-trash"></i> Delete</a></div></td>
+                              <td class="hidden-480"><div class="controls"> <a onclick="deleteone(<?=$rowdest['id']?>, <?=$_REQUEST['Uid']?>)" href="#" class="btn mini red"><i class="icon-trash"></i> Delete</a></div></td>
                             </tr>
                             <?php $ctn++; } ?>
                           </tbody>
@@ -1219,7 +1184,6 @@ $(".dt_pic").datepicker({
                       </div>
                     </div>
                     <div class="col-md-12" id="add_invoice" style="display:none;">
-                      
                       <form action="" method="post" enctype="multipart/form-data">
                         <div class="table-responsive">
                           <input type="hidden" name="Uid" value="<?=$_REQUEST['Uid'];?>">
@@ -1246,7 +1210,6 @@ $(".dt_pic").datepicker({
                                     <input type="number" name="amount" required value="">
                                   </p></td>
                               </tr>
-                              
                               <tr>
                                 <td width="20%"><p>Due Date</p></td>
                                 <td width="5%"><p>:</p></td>
@@ -1258,10 +1221,10 @@ $(".dt_pic").datepicker({
                                 <td width="20%"><p>Status</p></td>
                                 <td width="5%"><p>:</p></td>
                                 <td><p>
-                                   <select class="span3 chosen" tabindex="1" name="status" id="status">
-                                    <option value="Yes">Paid</option>
-                                    <option value="No" selected>Payment Due</option>
-                                  </select>
+                                    <select class="span3 chosen" tabindex="1" name="status" id="status">
+                                      <option value="Yes">Paid</option>
+                                      <option value="No" selected>Payment Due</option>
+                                    </select>
                                   </p></td>
                               </tr>
                               <tr>
@@ -1271,7 +1234,6 @@ $(".dt_pic").datepicker({
                                     <input type="file" required name="pdf">
                                   </p></td>
                               </tr>
-                              
                               <tr>
                                 <td></td>
                                 <td></td>
@@ -1306,7 +1268,7 @@ $(".dt_pic").datepicker({
 <div class="footer">
   <?php include"lib/footer.php";?>
 </div>
-<!--<script type="text/javascript" src="../js/jquery-1.10.1.min.js"></script> -->
+<!--<script type="text/javascript" src="../js/jquery-1.10.1.min.js"></script> --> 
 <script type="text/javascript">
 function edit_profile()
 {
@@ -1424,12 +1386,11 @@ $(document).ready(function(){
     });
 });
 </script> 
-	<script src="assets/scripts/table-managed.js"></script>
-	<script type="text/javascript" src="assets/plugins/data-tables/jquery.dataTables.js"></script>
-	<script type="text/javascript" src="assets/plugins/data-tables/DT_bootstrap.js"></script>  
-	
+<script src="assets/scripts/table-managed.js"></script> 
+<script type="text/javascript" src="assets/plugins/data-tables/jquery.dataTables.js"></script> 
+<script type="text/javascript" src="assets/plugins/data-tables/DT_bootstrap.js"></script> 
 
-    <!-- <script  language="javascript" src="../js/frm_validator.js"></script>-->
+<!-- <script  language="javascript" src="../js/frm_validator.js"></script>--> 
 <script type="text/javascript">
 		/*jQuery(document).ready(function() {       
 		   App.init();
@@ -1517,8 +1478,7 @@ $(document).ready(function(){
 		}
 	}
 	</script> 
-    
-    
+
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
