@@ -1,6 +1,6 @@
 <?php include"lib/header.php";
-				//Insert User Registration			  
-if($_REQUEST['submit']=="Save"){	                         
+		//Insert User Registration			  
+if($_REQUEST['submit']=="Submit"){	                         
 				//echo "<pre>";print_r($_REQUEST);  die;
 function randomPrefix($length){ 
 	$random= "";
@@ -13,27 +13,17 @@ function randomPrefix($length){
 	}
 		return $random; 
 }
-function random_username($string) {
-$pattern = " ";
-$firstPart = strstr(strtolower($string), $pattern, true);
-$secondPart = substr(strstr(strtolower($string), $pattern, false), 0,3);
-$nrRand = rand(0, 100);
-
-$username = trim($firstPart).trim($secondPart).trim($nrRand);
-return $username;
-}
 $client_name = $_REQUEST['client_name'];     
 $abn = $_REQUEST['abn']; 
 $trading_as = $_REQUEST['trading_as'];
 $website = $_REQUEST['website'];
 $street_address = $_REQUEST['street_address'];
 $postal_address = $_REQUEST['postal_address'];
-$username = random_username($client_name);
 $temp_pwd = randomPrefix(13);
 for($i=0;$i<count($_REQUEST['email']);$i++){
 	if($_REQUEST['email'][$i]['address'] !=''){
 		if($_REQUEST['email'][$i]['pos'] == 'other'){
-			$other = $_REQUEST['email'][$i]['pos'];
+			$other = 'email_'.$i.'_pos_other';
 			$email[] = $_REQUEST['email'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['email'][$i]['address'];
 		}else{
 			$email[] = $_REQUEST['email'][$i]['pos']."@@".$_REQUEST['email'][$i]['address'];
@@ -43,7 +33,7 @@ for($i=0;$i<count($_REQUEST['email']);$i++){
 for($i=0;$i<count($_REQUEST['fax']);$i++){
 	if($_REQUEST['fax'][$i]['address'] !=''){
 		if($_REQUEST['fax'][$i]['pos'] == 'other'){
-			$other = $_REQUEST['fax'][$i]['pos'];
+			$other = 'fax_'.$i.'_pos_other';
 			$fax[] = $_REQUEST['fax'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['fax'][$i]['address'];
 		}else{
 			$fax[] = $_REQUEST['fax'][$i]['pos']."@@".$_REQUEST['fax'][$i]['address'];
@@ -53,7 +43,7 @@ for($i=0;$i<count($_REQUEST['fax']);$i++){
 for($i=0;$i<count($_REQUEST['cp']);$i++){
 	if($_REQUEST['cp'][$i]['address'] !=''){
 		if($_REQUEST['cp'][$i]['pos'] == 'other'){
-			$other = $_REQUEST['cp'][$i]['pos'];
+			$other = 'cp_'.$i.'_pos_other';
 			$cp[] = $_REQUEST['cp'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['cp'][$i]['address'];
 		}else{
 			$cp[] = $_REQUEST['cp'][$i]['pos']."@@".$_REQUEST['cp'][$i]['address'];
@@ -63,7 +53,7 @@ for($i=0;$i<count($_REQUEST['cp']);$i++){
 for($i=0;$i<count($_REQUEST['phone']);$i++){
 	if($_REQUEST['phone'][$i]['address'] !=''){
 		if($_REQUEST['phone'][$i]['pos'] == 'other'){
-			$other = $_REQUEST['phone'][$i]['pos'];
+			$other = 'phone_'.$i.'_pos_other';
 			$phone[] = $_REQUEST['phone'][$i]['pos']."%%".$_REQUEST[$other]."@@".$_REQUEST['phone'][$i]['address'];
 		}else{
 			$phone[] = $_REQUEST['phone'][$i]['pos']."@@".$_REQUEST['phone'][$i]['address'];
@@ -79,7 +69,13 @@ if($upload_image <> ''){
 	$upload_image = '';
 }
 
-mysql_query("insert into hr_user_registration(RegistrationNo,client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person,UserImage,UserName,Password) VALUES('','".$client_name."','".$abn."','".$trading_as."','".serialize($email)."','".serialize($phone)."','".$website."','".$street_address."','".$postal_address."','".serialize($fax)."','".serialize($cp)."','".$upload_image."','".$username."','".$temp_pwd."') ") or die(mysql_error());
+mysql_query("insert into hr_user_registration(RegistrationNo,client_name,BusinessName,TradingName,EmailId,Phone,Website,Address,BusinessAddress,Fax,contact_person,UserImage,Password) VALUES('','".$client_name."','".$abn."','".$trading_as."','".serialize($email)."','".serialize($phone)."','".$website."','".$street_address."','".$postal_address."','".serialize($fax)."','".serialize($cp)."','".$upload_image."','".$temp_pwd."') ") or die(mysql_error());
+$last_inserted_id  = mysql_insert_id();
+$state = substr($_POST['state_au'],0,3);
+$year = date('y');
+$last_id = str_pad($last_inserted_id, 4, '0', STR_PAD_LEFT);
+$username = "c".strtolower($state).$year.$last_id;
+mysql_query("update hr_user_registration set UserName = '".$username."' where Uid = '".$last_inserted_id."'") or die(mysql_error());
 $_SESSION['username'] = $username;
 $_SESSION['temp_pwd'] = $temp_pwd;
 header("location:email_verification.php"); die;	
@@ -114,6 +110,12 @@ header("location:email_verification.php"); die;
 .new-input {
 	margin-left: 2%;
 	width: 45%
+}
+#cp_div{
+position:relative
+}
+#cp_div .r-btnAdd{
+    left: 125px;
 }
 </style>
 <!-- END LightBox View -->
@@ -244,7 +246,11 @@ header("location:email_verification.php"); die;
                 <div class="control-group" style="margin-bottom:0px;">
                   <label class="control-label">Street Address <span style="color:#ff0000;">*</span></label>
                   <div class="controls">
-                    <textarea class="span m-wrap" name="street_address"  id="street_address" rows="4" ></textarea>
+                    <textarea class="span m-wrap" name="street_address"  id="street_address" rows="4" autocomplete="off" ></textarea>
+		    <input  type="hidden" id="state_au" name="state_au" class="hidden"/>
+		     <input disabled type="text" id="city_au" name="city_au" class="hidden"/>
+		      <input disabled type="text" id="postal_au" name="postal_au" class="hidden"/>
+		      
                   </div>
                 </div>
                 <div class="control-group" style="margin-bottom:0px;">
@@ -252,7 +258,7 @@ header("location:email_verification.php"); die;
                   <div id="phone_number_div">
                     <button type="button" class="r-btnAdd">Add New</button>
                     <div class="r-group">
-                      <select name="phone[0][pos]" id="phone_0_pos" data-pattern-name="phone[++][pos]" data-pattern-id="phone_++_pos"    onChange="check_contact_person(this.value);" style="width:50%"  >
+                      <select class="select" name="phone[0][pos]" id="phone_0_pos" data-pattern-name="phone[++][pos]" data-pattern-id="phone_++_pos"    onChange="check_contact_person(this);" style="width:50%"  >
                         <option value="Manager">Manager</option>
                         <option value="Admin">Admin</option>
                         <option value="Payroll">Payroll</option>
@@ -271,9 +277,9 @@ header("location:email_verification.php"); die;
                 <div class="control-group" style="margin-bottom:0px;">
                   <label class="control-label" >Email(s) <span style="color:#ff0000;">* </span> </label>
                   <div id="email_div">
-                    <button type="button" class="r-btnAdd">Add New</button>
-                    <div class="r-group">
-                      <select name="email[0][pos]" id="email_0_pos" data-pattern-name="email[++][pos]" data-pattern-id="email_++_pos" onChange="check_contact_person(this.value);" style="width:50%"  >
+                    <button type="button" class="r-btnAddEmail">Add New</button>
+                    <div class="r-groupEmail">
+                      <select class="select" name="email[0][pos]" id="email_0_pos" data-pattern-name="email[++][pos]" data-pattern-id="email_++_pos" onChange="check_contact_person(this);" style="width:50%"  >
                         <option value="Manager">Manager</option>
                         <option value="Admin">Admin</option>
                         <option value="Payroll">Payroll</option>
@@ -285,7 +291,7 @@ header("location:email_verification.php"); die;
                       </div>
                       
                       <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
-                      <button type="button" class="r-btnRemove">Remove -</button>
+                      <button type="button" class="r-btnRemoveEmail">Remove -</button>
                     </div>
                   </div>
                 </div>
@@ -308,9 +314,9 @@ header("location:email_verification.php"); die;
                 <div class="control-group" style="margin-bottom:0px;">
                   <label class="control-label" >Contact Person(s)</label>
                   <div id="cp_div">
-                    <button type="button" class="r-btnAdd">Add New</button>
-                    <div class="r-group">
-                      <select name="cp[0][pos]" id="cp_0_pos" data-pattern-name="cp[++][pos]" data-pattern-id="cp_++_pos"   onChange="check_contact_person(this.value);" style="width:50%"  >
+                    <button type="button" class="r-btnAddcp">Add New</button>
+                    <div class="r-groupcp">
+                      <select class="select" name="cp[0][pos]" id="cp_0_pos" data-pattern-name="cp[++][pos]" data-pattern-id="cp_++_pos"   onChange="check_contact_person(this);" style="width:50%"  >
                         <option value="Manager">Manager</option>
                         <option value="Admin">Admin</option>
                         <option value="Payroll">Payroll</option>
@@ -323,7 +329,7 @@ header("location:email_verification.php"); die;
                       </div>
                       
                       <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
-                      <button type="button" class="r-btnRemove">Remove -</button>
+                      <button type="button" class="r-btnRemovecp">Remove -</button>
                     </div>
                   </div>
                 </div>
@@ -338,9 +344,9 @@ header("location:email_verification.php"); die;
                 <div class="control-group" style="margin-bottom:0px;">
                   <label class="control-label" >Fax Number(s)</label>
                   <div id="fax_number_div">
-                    <button type="button" class="r-btnAdd">Add New</button>
-                    <div class="r-group">
-                      <select name="fax[0][pos]" id="fax_0_pos" data-pattern-name="fax[++][pos]" data-pattern-id="fax_++_pos"  onChange="check_contact_person(this.value);" style="width:50%"  >
+                    <button type="button" class="r-btnAddF">Add New</button>
+                    <div class="r-groupF">
+                      <select class="select" name="fax[0][pos]" id="fax_0_pos" data-pattern-name="fax[++][pos]" data-pattern-id="fax_++_pos"  onChange="check_contact_person(this);" style="width:50%"  >
                         <option value="Manager">Manager</option>
                         <option value="Admin">Admin</option>
                         <option value="Payroll">Payroll</option>
@@ -353,7 +359,7 @@ header("location:email_verification.php"); die;
                       </div>
                       
                       <!-- Add a remove button for the item. If one didn't exist, it would be added to overall group -->
-                      <button type="button" class="r-btnRemove">Remove -</button>
+                      <button type="button" class="r-btnRemoveF">Remove -</button>
                     </div>
                   </div>
                 </div>
@@ -409,18 +415,73 @@ header("location:email_verification.php"); die;
 <script type="text/javascript" src="assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> 
 <script type="text/javascript" src="assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script> 
 <script  language="javascript" src="../js/frm_validator.js"></script> 
+
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAPbW5uWvQ9fvqtWcWJXQ3jW3hX7ya36uA&sensor=false&amp;libraries=places&region=in" type="text/javascript"></script>
+	<script type="text/javascript">
+	var autocomplete;
+	var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+      };
+	function initialize() {
+	var options = {
+	types:['geocode'],
+	componentRestrictions: {country: "au"}
+	};
+	var input = document.getElementById('street_address');
+	 autocomplete = new google.maps.places.Autocomplete(input, options);
+
+	autocomplete.addListener('place_changed', fillInAddress);
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
+	
+		function fillInAddress() {
+	var place = autocomplete.getPlace();
+	
+	document.getElementById("state_au").value = '';
+	document.getElementById("city_au").value = '';
+	document.getElementById("postal_au").value = '';
+  // Get each component of the address from the place details
+        // and fill the corresponding field on the form.
+        for (var i = 0; i < place.address_components.length; i++) {
+          var addressType = place.address_components[i].types[0];
+          if (componentForm[addressType]) {
+            var val = place.address_components[i][componentForm[addressType]];
+	    if(addressType == "administrative_area_level_1"){
+	               document.getElementById("state_au").value = val;
+	    }
+	     else if(addressType == "locality"){
+	               document.getElementById("city_au").value = val;
+	    }
+	     if(addressType == "postal_code"){
+	               document.getElementById("postal_au").value = val;
+	    }     
+          }
+        }	
+	}
+	</script>
+
+
 <script>
-$('select').change(function(){
-var value=$(this).val();
-var select_name  = this.id;
-if(value=="Other"){
-$(this).addClass("abc")
-$(this).after( "<input type='text' name='"+select_name+"_other' class='new-input'>" );
+
+function check_contact_person(val){
+//alert(val.value)
+var select_name  = val.id;
+if(val.value=="Other"){
+$(val).addClass("abc")
+$(val).after( "<input type='text' name='"+select_name+"_other' class='new-input'>" );
 }
 else{
-$(this).next('input').remove();
+//$(this).next('input').remove();
+$("input[name="+select_name+"_other]").remove();
 }
-});
+}
+
+
 
 $("#postal_address_chk").change(function() {
     if(this.checked) {
@@ -745,9 +806,9 @@ $("#postal_address_chk").change(function() {
       clearValues: true
   });
    $('#fax_number_div').repeater({
-      btnAddClass: 'r-btnAdd',
-      btnRemoveClass: 'r-btnRemove',
-      groupClass: 'r-group',
+      btnAddClass: 'r-btnAddF',
+      btnRemoveClass: 'r-btnRemoveF',
+      groupClass: 'r-groupF',
       minItems: 1,
       maxItems: 0,
       startingIndex: 0,
@@ -759,9 +820,9 @@ $("#postal_address_chk").change(function() {
       clearValues: true
   });
    $('#email_div').repeater({
-      btnAddClass: 'r-btnAdd',
-      btnRemoveClass: 'r-btnRemove',
-      groupClass: 'r-group',
+      btnAddClass: 'r-btnAddEmail',
+      btnRemoveClass: 'r-btnRemoveEmail',
+      groupClass: 'r-groupEmail',
       minItems: 1,
       maxItems: 0,
       startingIndex: 0,
@@ -773,9 +834,9 @@ $("#postal_address_chk").change(function() {
       clearValues: true
   });
   $('#cp_div').repeater({
-      btnAddClass: 'r-btnAdd',
-      btnRemoveClass: 'r-btnRemove',
-      groupClass: 'r-group',
+      btnAddClass: 'r-btnAddcp',
+      btnRemoveClass: 'r-btnRemovecp',
+      groupClass: 'r-groupcp',
       minItems: 1,
       maxItems: 0,
       startingIndex: 0,
