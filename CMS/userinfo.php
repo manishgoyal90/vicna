@@ -17,6 +17,10 @@ function get_filter_value($vicna_col){
 			return $vicna_col_final_datas;
 
 }
+if(isset($_POST['booking_submit'])){
+	mysql_query("insert into booking( `client_id`, `requested_by`, `address`, `area`, `qualification`, `booking_date`, `booking_time`, `specialty`, `requested_staff_name`, `comments`) values('".$_GET['Uid']."','".$_POST['requested_by']."','".$_POST['address']."','".$_POST['area']."','".$_POST['qualification']."','".$_POST['booking_date']."','".$_POST['booking_time']."','".$_POST['speciality']."','".$_POST['staff_name']."','".$_POST['comments']."')") or die(mysql_error());
+}
+
 
 if(isset($_REQUEST['Update'])) {	                         
 	$uid = $_REQUEST['Uid'];
@@ -307,14 +311,9 @@ if(isset($_REQUEST['addInvoice']))
 					if($rowdest7['UserImage'] == "")
 					{
 						$proset = "../profileImage/profile_pic.jpg";
-					}
-					else if(!is_file("../profileImage/".$rowdest7['UserImage']))
+					}else
 					{
-						$proset = "../rofileImage/profile_pic.jpg";
-					}
-					else
-					{
-						$proset = "../profileImage/".$rowdest7['UserImage'];
+						$proset = $siteurladmin."upload/".$rowdest7['UserImage'];
 					} 	
 		
 	?>
@@ -519,7 +518,7 @@ $(".dt_pic").datepicker({
             <ul class="nav nav-tabs">
               <li <?php if(isset($_REQUEST['update']) || isset($_REQUEST['invoice'])){echo 'class=""';}else{echo 'class="active"';}?>><a href="#tab_1_1" data-toggle="tab">Profile</a></li>
               <li <?php if(isset($_REQUEST['update'])){echo 'class="active"';}else{echo 'class=""';}?>><a href="#tab_1_2" data-toggle="tab">Bookings</a></li>
-              <li <?php if(isset($_REQUEST['invoice'])){echo 'class="active"';}else{echo 'class=""';}?>><a href="#tab_1_3" data-toggle="tab">All Invoice</a></li>
+              <li <?php if(isset($_REQUEST['invoice'])){echo 'class="active"';}else{echo 'class=""';}?>><a href="#tab_1_3" data-toggle="tab">Accounts </a></li>
               <!-- <li><a href="#tab_1_7" data-toggle="tab">My Settings</a></li>
 								 <li><a href="#tab_1_6" data-toggle="tab">Member Privilege</a></li>--> 
               <!--<li><a href="#tab_1_4" data-toggle="tab">Course Reviews</a></li>-->
@@ -835,6 +834,7 @@ $(".dt_pic").datepicker({
                       <div class="tab-content">
                         <div class="tab-pane row-fluid active" id="tab_2_1">
                           <div class="row-fluid">
+                          <form name="booking_form" action="" method="post">
                             <div class="span6">
                               <div class="control-group" style="margin-bottom:0px;">
                                 <label class="control-label">Company/Trust/Client Name</label>
@@ -879,7 +879,13 @@ $(".dt_pic").datepicker({
                               <div class="control-group" style="margin-bottom:0px;">
                                 <label class="control-label">Shift Requested By</label>
                                 <div class="controls">
-                                  <input type="text" class="span m-wrap" name="trading_as" id="shift_requested" value="" readonly>
+                                  <input type="text" class="span m-wrap" name="shift_requested_by" id="shift_requested_by" value="">&nbsp;&nbsp;<select class="select" name="shift_requested_by_pos"  style="width:50%"  >
+                        <option value="Manager">Manager</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Payroll">Payroll</option>
+                        <option value="Nurse In-Charge">Nurse In-Charge</option>
+                        <option value="Other">Other</option>
+                      </select>
                                 </div>
                               </div>
                             </div>
@@ -890,19 +896,19 @@ $(".dt_pic").datepicker({
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Address</label>
                                     <div class="controls">
-                                      <textarea class="span m-wrap" name="street_address" id="Address" rows="4"></textarea>
+                                      <textarea class="span m-wrap" name="address" id="Address" rows="4"></textarea>
                                     </div>
                                   </div>
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Area/Ward</label>
                                     <div class="controls">
-                                      <input type="text" class="span m-wrap" name="trading_as" id="area_ward" value="">
+                                      <input type="text" class="span m-wrap" name="area" id="area_ward" value="">
                                     </div>
                                   </div>
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Qualification</label>
                                     <div class="controls">
-                                      <input type="email" class="span m-wrap" name="trading_as" id="Qualification" value="">
+                                      <input type="text" class="span m-wrap" name="qualification" id="Qualification" value="">
                                     </div>
                                   </div>
                                 </div>
@@ -910,25 +916,25 @@ $(".dt_pic").datepicker({
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Date</label>
                                     <div class="controls">
-                                      <input type="text" class="span m-wrap" name="trading_as" id="Date" value="">
+                                      <input type="text" class="span m-wrap" name="booking_date" id="Date" value="">
                                     </div>
                                   </div>
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Time</label>
                                     <div class="controls">
-                                      <input type="text" class="span m-wrap" name="trading_as" id="Time" value="">
+                                      <input type="text" class="span m-wrap" name="booking_time" id="Time" value="">
                                     </div>
                                   </div>
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Speciality(if any)</label>
                                     <div class="controls">
-                                      <input type="email" class="span m-wrap" name="trading_as" id="Speciality" value="">
+                                      <input type="text" class="span m-wrap" name="speciality" id="Speciality" value="">
                                     </div>
                                   </div>
                                   <div class="control-group" style="margin-bottom:0px;">
                                     <label class="control-label">Staff Requested</label>
                                     <div class="controls">
-                                      <input type="email" class="span m-wrap" name="trading_as" id="staff_req" value="">
+                                      <input type="text" class="span m-wrap" name="staff_name" id="staff_req" value="">
                                     </div>
                                   </div>
                                 </div>
@@ -937,14 +943,15 @@ $(".dt_pic").datepicker({
                                 <div class="control-group" style="margin-bottom:0px;">
                                   <label class="control-label">Comments</label>
                                   <div class="controls">
-                                    <textarea class="span m-wrap" name="street_address" id="Comments" rows="4"></textarea>
+                                    <textarea class="span m-wrap" name="comments" id="Comments" rows="4"></textarea>
                                   </div>
                                 </div>
                               </div>
                               <div class="modal-footer" style="text-align:left;float: left;width: 100%;">
-                                <input type="submit" class="btn blue" name="submit" value="Submit">
+                                <input type="submit" class="btn blue" name="booking_submit" value="Submit">
                               </div>
                             </div>
+                            </form>
                           </div>
                         </div>
                         
@@ -970,17 +977,21 @@ $(".dt_pic").datepicker({
                                       </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $booking_display_query = mysql_query("select * from booking where client_id = '".$_GET['Uid']."'") or die();
+                                        while($booking_display_result = mysql_fetch_array($booking_display_query)){
+                                        ?>
                                       <tr class="odd gradeX">
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
-                                        <td class="hidden-480">abf</td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['address']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['area']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['booking_date']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['booking_time']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['qualification']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['specialty']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['requested_staff_name']; ?></td>
+                                        <td class="hidden-480"><?php echo $booking_display_result['comments']; ?></td>
+                                        <td class="hidden-480"><?php //echo $booking_display_result['address']; ?></td>
                                       </tr>
+                                        <?php } ?>
                                     </tbody>
                                   </table>
                                 </div>
@@ -1126,7 +1137,7 @@ $(".dt_pic").datepicker({
               <div class="tab-pane profile-classic <?php if(isset($_REQUEST['invoice'])){echo 'active';}else{echo '';}?> row-fluid" id="tab_1_3">
                 <div class="row-fluid">
                   <div class="span profile-info">
-                    <h3>All Invoices&nbsp;
+                    <h3>Accounts&nbsp;
                       <button id="add_new_inv" onClick="add_invoice();" class="btn mini green">Add New <i class="icon-edit"></i></button>
                       <button id="view_inv" onClick="view_invoice();" style="display:none;" class="btn mini green">View All <i class="icon-edit"></i></button>
                       &nbsp;</h3>
